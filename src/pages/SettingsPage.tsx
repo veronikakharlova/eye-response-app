@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import Header from '../layout/Header'
-import { EmptyState } from '../components/StateViews'
 import { useAuth } from '../lib/AuthContext'
 import { isSupabaseConfigured } from '../lib/supabaseClient'
 import { changePassword } from '../lib/backend'
@@ -14,6 +13,13 @@ function initialsFromEmail(email: string | undefined): string {
   const letters = parts.length >= 2 ? parts[0][0] + parts[1][0] : local.slice(0, 2)
   return letters.toUpperCase()
 }
+
+// Демо-профиль для режима без Supabase — не настоящий аккаунт, просто
+// пример того, как выглядит карточка врача, когда она есть. Раньше здесь
+// был EmptyState «нечего настраивать», но это буквально неверно: посмотреть
+// на профиль есть на что, просто сменить пароль в демо-режиме нельзя (не к
+// чему подключаться) — это и показываем, честно объяснив почему.
+const DEMO_DOCTOR = { name: 'Екатерина Смирнова', initials: 'ЕС' }
 
 export default function SettingsPage() {
   const { session, signOut } = useAuth()
@@ -29,16 +35,38 @@ export default function SettingsPage() {
     return (
       <div>
         <Header title="Настройки" />
-        {/* Тот же компонент EmptyState, что и на «Отчётах» при пустом журнале —
-            одна и та же карточка-заглушка с иконкой вместо двух разных
-            самодельных вариантов центрированного текста. */}
-        <div className="data-card">
-          <EmptyState
-            icon="inbox"
-            title="Пока нечего настраивать"
-            description="Приложение работает на статичных данных, без входа."
-          />
+
+        <div className="data-card" style={{ padding: '28px 32px', maxWidth: 480, marginBottom: 20 }}>
+          <span className="panel__label">Профиль врача</span>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, margin: '16px 0 4px' }}>
+            <div
+              style={{
+                width: 56,
+                height: 56,
+                borderRadius: '999px',
+                background: 'linear-gradient(135deg, var(--accent), #9b8cff)',
+                color: '#fff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 18,
+                fontWeight: 600,
+                flexShrink: 0,
+              }}
+            >
+              {DEMO_DOCTOR.initials}
+            </div>
+            <div>
+              <p style={{ margin: 0, fontSize: 15, fontWeight: 600 }}>{DEMO_DOCTOR.name}</p>
+              <p style={{ margin: '2px 0 0', fontSize: 13, color: 'var(--muted)' }}>Врач-офтальмолог</p>
+            </div>
+          </div>
         </div>
+
+        <p className="form-field__hint" style={{ maxWidth: 480 }}>
+          Демо-режим: профиль выше — пример, не настоящий аккаунт, поэтому сменить пароль здесь нельзя, подключаться не к чему. В обычном режиме имя и специализация задаются администратором клиники при создании аккаунта, а смена пароля работает по-настоящему.
+        </p>
       </div>
     )
   }
