@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# SPA: react-router работает на клиенте, поэтому любой путь (например
+# /patients/AVA при обновлении страницы) должен отдавать index.html,
+# а не 404 от сервера — дальше маршрутизацию берёт на себя React Router.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

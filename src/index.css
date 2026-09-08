@@ -1,0 +1,42 @@
+:root {
+  /* Палитра подобрана под референс интерфейса пациентов, который прислала
+     Вероника: светло-лавандовый фон страницы, белые карточки, акцент —
+     индиго/фиолетовый (а не прежний синий), мягкие скругления. */
+  --bg: #f7f7fb;
+  --surface: #ffffff;
+  --surface-muted: #f3f2fb;
+  --text: #17181f;
+  --muted: #6b7080;
+  --accent: #6a5cf0;
+  --accent-soft: #efedfe;
+  --accent-text: #4c3fd1;
+  --border: #ececf3;
+  --warn-bg: #fbeee3;
+  --warn-text: #8a4b1f;
+  --ok-bg: #e7eaf1;
+  --ok-text: #151a24;
+  --sidebar-w: 76px;
+  --header-h: 72px;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+}
+
+/* Ровно два начертания на весь интерфейс: 400 — весь обычный текст,
+   600 — заголовки и смысловое выделение. Раньше h1/h2/<strong> нигде не
+   задавали вес явно и подхватывали жирность браузера по умолчанию (обычно
+   700 или "bolder"), из-за чего в интерфейсе незаметно набегало 3-4 разных
+   начертания вместо запланированных двух. */
+h1, h2, h3, strong {
+  font-weight: 600;
+}

@@ -1,0 +1,519 @@
+.page {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 20px 14px 60px;
+  }
+}
+
+.page__header h1 {
+  font-size: 28px;
+  margin: 0 0 8px;
+}
+
+.page__subtitle {
+  color: var(--muted);
+  max-width: 640px;
+  line-height: 1.5;
+}
+
+/* Двухколоночная раскладка: слева всегда видны выбор пациента, признаки
+   и результат; справа — график, который может быть сколько угодно высоким. */
+.layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+/* Обе половины экрана — сплошные белые карточки (как .chart справа),
+   а не серая страница с отдельными белыми плашками внутри. Секции внутри
+   разделены тонкой линией сверху, а не отдельными белыми фонами. */
+.sidebar {
+  width: 340px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.sidebar > section + section {
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* На десктопе карточка пациента специально подогнана так, чтобы всё —
+   признаки, результат и три графика — помещалось без прокрутки (см.
+   комментарии у CSFChart height). На телефоне это ограничение снимается:
+   прокрутка на телефоне — обычное дело, а вот две узкие колонки бок о бок —
+   нет, поэтому здесь просто складываем колонки в одну. */
+@media (max-width: 900px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+
+  .chart {
+    position: static;
+  }
+}
+
+.panel__label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.patient-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.patient-search {
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.patient-search:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(29, 79, 232, 0.22);
+}
+
+.patient-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.patient-filter {
+  font-family: inherit;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.patient-filter--active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.patient-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 175px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  padding: 4px;
+}
+
+/* Два глаза одного пациента группируются под общим заголовком-кодом —
+   без этого "AVA · прав." и "AVA · лев." читались как два разных человека. */
+.patient-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 0 4px;
+}
+
+.patient-group + .patient-group {
+  border-top: 1px solid var(--border);
+  margin-top: 2px;
+}
+
+.patient-group__header {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0 10px 2px;
+}
+
+.patient-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  border: none;
+  border-left: 3px solid transparent;
+  background: transparent;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.patient-row:hover {
+  background: var(--surface-muted);
+}
+
+.patient-row--active {
+  background: var(--surface-muted);
+  border-left: 3px solid var(--accent);
+}
+
+.patient-row__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.patient-row__age {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.patient-row__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--surface-muted);
+  color: var(--muted);
+}
+
+.badge--sm {
+  padding: 2px 9px;
+  font-size: 11px;
+}
+
+.patient-list__empty {
+  padding: 16px 10px;
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+  text-align: center;
+}
+
+.chart {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  position: sticky;
+  top: 24px;
+}
+
+.chart__controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.chart__controls-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-right: 2px;
+}
+
+.chart__controls-sep {
+  color: var(--muted);
+}
+
+.range-input {
+  width: 68px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+.range-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(29, 79, 232, 0.22);
+}
+
+.chart__reset {
+  margin-left: 4px;
+  font-family: inherit;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.chart__reset:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.chart__print-btn {
+  margin-left: auto;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+}
+
+.chart__print-btn:hover {
+  opacity: 0.92;
+}
+
+/* Печать графика: скрыт по умолчанию, показывается только в @media print
+   ниже — так в PDF попадает только сам график с подписью пациента, без
+   сайдбара, шапки и элементов управления диапазоном. */
+.print-only {
+  display: none;
+}
+
+.chart__print-header {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print-chart-area,
+  .print-chart-area * {
+    visibility: visible;
+  }
+  .print-chart-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+  }
+  .chart__controls {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
+
+.features h2 {
+  font-size: 16px;
+  margin: 0 0 6px;
+}
+
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.features__grid > div {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.features__grid span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.features__grid strong {
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* НЧ/ВЧ — не пятый измеренный признак, а отношение двух соседних (НЧ и ВЧ),
+   поэтому отдельная строка с другим фоном, а не ещё одна ячейка в сетке 2×2. */
+.features__derived {
+  margin-top: 6px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.features__derived span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.features__derived strong {
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Факт из базы — не оценка и не вычисление, поэтому без цветной плашки и акцента */
+.result__fact {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 2px 4px;
+}
+
+.result__fact-label {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.result__fact-value {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Раньше здесь была синяя полоска слева — но она визуально повышала вес
+   результата (выглядело как "проверено"), хотя карточка сама честно
+   предупреждает, что это не диагноз. Убрали акцент, чтобы карточка не
+   выглядела увереннее, чем позволяет метод. */
+.result__classification {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.result__classification-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+/* Короткая оговорка прямо в карточке результата — рядом с бейджем, а не
+   отдельным блоком ниже мелким текстом, который легко пропустить. */
+.result__classification-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 6px 0 0;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+/* Само совпадение/несовпадение живёт в бейдже, не в цвете всей карточки:
+   несовпадение — это ожидаемый исход метода (~50% точности по ВКР), а не ошибка. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge--match {
+  background: #e3f3e8;
+  color: #2f6b45;
+}
+
+/* Янтарный, а не серый: "на осмотр" — это сигнал к действию, а не просто
+   нейтральное состояние, и он не должен читаться как "ничего особенного". */
+.badge--mismatch {
+  background: var(--warn-bg);
+  color: var(--warn-text);
+}
+
+.result__caveat {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0 4px;
+}
+
+/* Свёрнуто по умолчанию — видно первые 2 строки, весь текст остаётся в
+   разметке (не теряется), просто раскрывается по клику. */
+.result__caveat--collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.result__caveat-label {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.result__caveat-toggle {
+  align-self: flex-start;
+  margin: 4px 4px 0;
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-text);
+  cursor: pointer;
+}
+
+.result__caveat-toggle:hover {
+  text-decoration: underline;
+}

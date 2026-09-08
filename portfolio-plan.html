@@ -1,0 +1,467 @@
+<title>Дорожная карта ОЭРГ</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+  :root {
+    --bg: #faf9fc;
+    --surface: #ffffff;
+    --surface-alt: #f2effa;
+    --ink: #201c2c;
+    --muted: #6e6a80;
+    --accent: #6a5cf0;
+    --accent-ink: #4c3fd1;
+    --accent-soft: #efedfe;
+    --accent-2: #0e9c8d;
+    --accent-2-soft: #e1f5f2;
+    --line: #e6e3ef;
+    --done-bg: #f4f7f3;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15121f;
+      --surface: #1d1929;
+      --surface-alt: #241f34;
+      --ink: #eeecf6;
+      --muted: #a49fbc;
+      --accent: #9285fb;
+      --accent-ink: #c9c2ff;
+      --accent-soft: #2b2547;
+      --accent-2: #35d6c0;
+      --accent-2-soft: #163430;
+      --line: #332d49;
+      --done-bg: #1c231e;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15121f;
+    --surface: #1d1929;
+    --surface-alt: #241f34;
+    --ink: #eeecf6;
+    --muted: #a49fbc;
+    --accent: #9285fb;
+    --accent-ink: #c9c2ff;
+    --accent-soft: #2b2547;
+    --accent-2: #35d6c0;
+    --accent-2-soft: #163430;
+    --line: #332d49;
+    --done-bg: #1c231e;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.65;
+    margin: 0;
+    padding: 56px 24px 96px;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  h1, h2 {
+    font-family: 'Manrope', system-ui, sans-serif;
+    color: var(--ink);
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+
+  /* ---------- masthead ---------- */
+
+  .masthead {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 36px;
+  }
+
+  .masthead__curve {
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  .masthead__title {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  .masthead__sub {
+    font-family: 'Manrope', system-ui, sans-serif;
+    font-size: 14.5px;
+    color: var(--muted);
+    margin-top: 8px;
+    max-width: 46ch;
+    line-height: 1.5;
+  }
+
+  .meter {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .meter__track {
+    flex: 1;
+    max-width: 260px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--surface-alt);
+    overflow: hidden;
+  }
+
+  .meter__fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    width: 0%;
+    transition: width 0.25s ease;
+  }
+
+  .meter__label {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  /* ---------- sections ---------- */
+
+  .module {
+    padding: 30px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .module:last-of-type {
+    border-bottom: none;
+  }
+
+  .module__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .module__title {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .effort {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    background: var(--accent-2-soft);
+    border-radius: 999px;
+    padding: 3px 9px;
+    white-space: nowrap;
+  }
+
+  .module__why {
+    color: var(--muted);
+    font-size: 15.5px;
+    margin: 0 0 18px;
+  }
+
+  .module__why b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .item:hover {
+    background: var(--surface-alt);
+  }
+
+  .item input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    border-radius: 6px;
+    border: 1.5px solid var(--line);
+    background: var(--surface);
+    cursor: pointer;
+    position: relative;
+  }
+
+  .item input[type="checkbox"]:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .item input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 9px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(40deg);
+  }
+
+  .item__text {
+    font-family: 'Manrope', system-ui, sans-serif;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  .item__text b {
+    font-weight: 700;
+  }
+
+  .item.done {
+    background: var(--done-bg);
+  }
+
+  .item.done .item__text {
+    color: var(--muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--line);
+    text-decoration-thickness: 1.5px;
+  }
+
+  footer {
+    margin-top: 40px;
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 520px) {
+    body { padding: 40px 16px 80px; }
+    .masthead { flex-direction: column; }
+    .masthead__title { font-size: 25px; }
+  }
+</style>
+
+<div class="page">
+
+  <div class="masthead">
+    <svg class="masthead__curve" width="46" height="40" viewBox="0 0 46 40" fill="none">
+      <path d="M1 20 Q6 4 11 20 T21 20 T31 20 T41 20" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
+      <path d="M1 20 Q6 30 11 20 T21 20 T31 20 T41 20" stroke="var(--accent-2)" stroke-width="1.4" stroke-dasharray="1 3.2" stroke-linecap="round" opacity="0.8"/>
+    </svg>
+    <div>
+      <h1 class="masthead__title">Дорожная карта ОЭРГ</h1>
+      <p class="masthead__sub">
+        Что доделать в приложении и в исследовательской части, прежде чем показывать всё это как кейс
+        в портфолио продуктового дизайнера с уклоном в разработку и датавиз. Шесть модулей — от
+        «нельзя показывать без этого» до честного разбора того, что из классического процесса
+        исследования сюда реально ложится, а что было бы враньём, и до сборки самой презентации.
+      </p>
+      <div class="meter">
+        <div class="meter__track"><div class="meter__fill" id="meterFill"></div></div>
+        <span class="meter__label" id="meterLabel">0 / 0</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="module" data-section="0">
+    <div class="module__head">
+      <span class="module__title">1. Прежде чем показывать</span>
+      <span class="effort">быстро</span>
+    </div>
+    <p class="module__why">
+      Три вещи, которые превращают демо в неловкую ситуацию на созвоне: живые данные там, где их
+      не должно быть, страница-заглушка в навигации и отсутствие ссылки, по которой вообще можно
+      кликнуть без твоего ноутбука.
+    </p>
+    <div class="checklist">
+      <label class="item done"><input type="checkbox" data-id="s0-0" checked><span class="item__text"><b>Публичная сборка проверена — реальных данных там нет физически, не только по .gitignore.</b> Нашли настоящую дыру: страница «Миопия» с ФИО 9 пациентов импортировала данные напрямую, и .gitignore защищает только git, а не собранный JS-бандл — при сборке с реальным файлом на диске имена ушли бы в публичный код. Теперь роут и ссылка в меню существуют только в dev-режиме (import.meta.env.DEV), проверено дважды через настоящую продакшен-сборку: с файлом на месте и без него, в обоих случаях бандл одинаковый и данных не содержит.</span></label>
+      <label class="item"><input type="checkbox" data-id="s0-1"><span class="item__text"><b>Задеплоить рабочую версию (Vercel/Netlify) — подготовка сделана, репозиторий ждёт push.</b> Локальный git-репозиторий создан, .gitignore закрывает все чувствительные файлы (включая случайно найденную папку «Референсы» с рабочими скриншотами — она тоже чуть не попала в первый коммит), vercel.json/netlify.toml добавлены для корректной работы React Router на проде. Осталось: создать репозиторий на GitHub и запушить, затем подключить его в Vercel или Netlify.</span></label>
+      <label class="item done"><input type="checkbox" data-id="s0-2" checked><span class="item__text"><b>Судьба страницы «Отчёты» — решено, стала настоящей.</b> Вместо скрытия из меню или заглушки — экспорт всей таблицы пациентов в CSV и честный журнал скачиваний PDF-графиков, с прозрачным «недоступно без Supabase» состоянием вместо выдуманных строк.</span></label>
+      <label class="item done"><input type="checkbox" data-id="s0-3" checked><span class="item__text"><b>Реальные данные ВКР перенесены в Supabase.</b> Все 30 пациентов и 60 визитов из таблиц 4.3–4.9 — теперь не только в статичном csfModel.ts, но и в самой базе: seed-скрипт запущен, «Аналитика» и «Отчёты» считают честные цифры на настоящих данных, а не на пустой таблице.</span></label>
+    </div>
+  </section>
+
+  <section class="module" data-section="1b">
+    <div class="module__head">
+      <span class="module__title">2. Исследование для кейса</span>
+      <span class="effort">непросто</span>
+    </div>
+    <p class="module__why">
+      У этого проекта не было отдельной исследовательской стадии в классическом смысле — он вырос
+      прямо из готовой эмпирики ВКР и строился в диалоге, а не по схеме
+      «интервью → персоны → вайрфреймы → прототип». Для кейса это не проблема, которую нужно
+      скрывать задним числом, а честный вопрос: что из процесса реально стоит добавить сейчас, а
+      что было бы придумыванием несуществовавших шагов — тем самым нарушив тот же принцип
+      «честность по дизайну», вокруг которого построен весь остальной кейс.
+    </p>
+    <div class="checklist">
+      <label class="item"><input type="checkbox" data-id="sr-0"><span class="item__text"><b>Конкурентный анализ — рынок закрытый, и это нормально.</b> Прямые аналоги (LKC RETeval, Diagnosys, Metrovision, Roland Consult) — не сайты с бесплатным триалом, а проприетарное ПО в комплекте с медицинским оборудованием: ни публичных скриншотов интерфейса, ни демо-доступа, только маркетинговые страницы под продажу через отдел закупок клиники. Классический UX-teardown экрана конкурента тут физически невозможен — и в кейсе стоит прямо написать почему, а не тихо пропустить раздел. Вместо разбора интерфейсов — сравнительная таблица по тому, что реально доступно публично: заявленные возможности, формат вывода данных, модель доступа (запрос через отдел продаж vs открытое веб-приложение).</span></label>
+      <label class="item"><input type="checkbox" data-id="sr-1"><span class="item__text"><b>Глубинные интервью — начать не с холодных контактов, а с тех, кто уже есть.</b> Научный руководитель ВКР и клиника/лаборатория, которая предоставила данные для таблиц 4.3–4.9, — это уже тёплый контакт с офтальмологами, теплее любого холодного письма. Если нужно расширять круг: «Пульс» и похожие платформы, где российские врачи участвуют в оплачиваемых опросах для research-задач; отраслевые сообщества офтальмологов; холодный аутрич через PubMed/ResearchGate по авторам смежных публикаций; и, самое недооценённое, — попросить первого найденного врача порекомендовать коллегу.</span></label>
+      <label class="item"><input type="checkbox" data-id="sr-2"><span class="item__text"><b>Персоны — честно как синтез, а не как результат интервью, которых пока не было.</b> Материал для одной обоснованной персоны есть уже сейчас: общий компьютер в кабинете на несколько врачей, имя и специализация администрируются централизованно, врач доверяет своей квалификации больше, чем автоматической классификации. Собрать это в персону можно уже сегодня — но в кейсе нужно прямо подписать, что это синтез экспертного знания и данных ВКР, а не выжимка из проведённых интервью.</span></label>
+      <label class="item"><input type="checkbox" data-id="sr-3"><span class="item__text"><b>User flow — задокументировать то, что уже реально построено.</b> Вход → список пациентов → карточка пациента с графиком → «Скачать PDF» (с логированием) → «Отчёты»/«Аналитика» — не гипотетическая схема, а факт того, как приложение устроено сегодня. Диаграмма этого flow честная именно потому, что описывает существующее поведение, а не воображаемое.</span></label>
+      <label class="item"><input type="checkbox" data-id="sr-4"><span class="item__text"><b>Вайрфреймы — здесь стоит быть осторожной с честностью процесса.</b> У проекта не было отдельной вайрфрейм-стадии — дизайн собирался прямо в коде, итеративно. Рисовать сейчас «ранние вайрфреймы» и выдавать их за исторический артефакт противоречит принципу «честность по дизайну». Честный вариант — либо не показывать вайрфреймы вообще и прямо написать, что процесс был code-first, либо сделать retrospective-схему низкой точности с явной подписью «реконструировано для документации, не архивный артефакт».</span></label>
+      <label class="item"><input type="checkbox" data-id="sr-5"><span class="item__text"><b>Визуальный стиль — моё мнение: дорабатывать глобально не нужно.</b> Система уже устойчивая: две гарнитуры веса на весь интерфейс, один паттерн карточки (data-card) переиспользован везде вплоть до «Помощи», «Отчётов» и «Настроек», осознанный выбор цвет+тип линии на графиках для дальтоников, семантические цветовые токены (warn/ok), введённые один раз и переиспользованные, а не придуманные под конкретный экран. Сейчас больше пользы будет от исследовательских материалов и текста кейса, чем от ещё одного прохода по визуалу — если, конечно, тебя саму что-то конкретное не смущает.</span></label>
+      <label class="item"><input type="checkbox" data-id="sr-6"><span class="item__text"><b>Кликабельный прототип в Figma — всё же нужен, но не как копия приложения.</b> Для роли продуктового дизайнера рецензент оценивает не только результат, но и то, как ты работаешь именно в Figma — структуру компонентов, auto-layout, переменные, прототипирование переходов. Пересобирать весь app 1:1 — низкая отдача. Вместо этого: (1) мини-библиотека компонентов, переведённая из тех же токенов, что уже в коде (--accent, --warn-bg, --ok-bg и т.д. → Figma variables); (2) 1-2 ключевых экрана с аккуратной структурой слоёв и auto-layout, не весь app; (3) настоящий прототип с переходами (Smart Animate) на одном осмысленном флоу. Всё укладывается в 3 файла бесплатного плана.</span></label>
+      <label class="item"><input type="checkbox" data-id="sr-7"><span class="item__text"><b>Честный «было / стало» по странице «Помощь» — готовый материал, ничего выдумывать не нужно.</b> Два реальных варианта layout по живой обратной связи: сетка 2×2 → одна колонка со sticky-панелью «Сообщить о проблеме». Воссоздать оба варианта как два фрейма в Figma с подписью, почему второй лучше, — честная демонстрация дизайн-мышления, а не придуманный задним числом процесс.</span></label>
+    </div>
+  </section>
+
+  <section class="module" data-section="1">
+    <div class="module__head">
+      <span class="module__title">3. Датавиз — твоя главная козырная карта</span>
+      <span class="effort">объёмно</span>
+    </div>
+    <p class="module__why">
+      <b>CSFChart уже сильная работа</b>: тройная диаграмма в стиле Боде (АЧХ/ЛАЧХ/ФЧХ) со своей
+      легендой на каждой панели, drag-zoom на графике синхронизирован с числовыми инпутами
+      диапазона, наложение «пациент vs норма», и — важная деталь для рецензента-дизайнера — ось
+      ЛАЧХ логарифмическая по декадам, а не просто «второй такой же график», в точности как в
+      самой ВКР. Это стоит вывести в кейс отдельным разделом с крупным скриншотом и подписью, что
+      именно здесь — осознанное дизайнерское решение, а не дефолт библиотеки графиков.
+      А «Аналитика» уже перестала быть просто таблицей средних — там теперь диаграмма по группам
+      и точечный график по каждому реальному пациенту.
+    </p>
+    <div class="checklist">
+      <label class="item done"><input type="checkbox" data-id="s1-0" checked><span class="item__text"><b>Визуализация на «Аналитике» — сделано.</b> Групповая столбчатая диаграмма по 4 патологиям на 5 признаков + точечная диаграмма по каждому реальному визиту (не только средние — виден разброс внутри группы) + честно пересчитанная точность классификации методом городских кварталов на текущих данных приложения, а не цитата из ВКР.</span></label>
+      <label class="item done"><input type="checkbox" data-id="s1-1" checked><span class="item__text"><b>Продольный график по визитам пациента — сделано.</b> На карточке пациента появилась «Динамика по визитам»: тренд phase1/slopePFC/nf по датам, плюс форма «Добавить визит», подключённая к addVisit. Один визит — просто точка без линии, без выдуманной динамики; настоящий тренд появляется, когда визитов действительно два и больше.</span></label>
+      <label class="item done"><input type="checkbox" data-id="s1-2" checked><span class="item__text"><b>Врез про CSFChart — написан.</b> Текст про локальную легенду, синхронизацию drag-zoom с инпутами и логарифмическую ось декад лежит в datavis-case-notes.md в корне проекта, готов к вставке в кейс.</span></label>
+      <label class="item done"><input type="checkbox" data-id="s1-3" checked><span class="item__text"><b>Читаемость для дальтонизма — проверено и доработано.</b> CSFChart уже был в порядке (цвет + тип линии). На точечной диаграмме «Аналитики» 4 группы патологий различались только цветом — добавила форму маркера на каждую группу (круг/квадрат/треугольник/крест), второй независимый от цвета канал. Текст для кейса — в datavis-case-notes.md.</span></label>
+    </div>
+  </section>
+
+  <section class="module" data-section="2">
+    <div class="module__head">
+      <span class="module__title">4. UX-хвосты</span>
+      <span class="effort">средне</span>
+    </div>
+    <p class="module__why">
+      Мелочи, которые рецензент не назовёт по имени, но почувствует как «что-то не собрано».
+    </p>
+    <div class="checklist">
+      <label class="item done"><input type="checkbox" data-id="s2-0" checked><span class="item__text"><b>Визуальный язык пустых состояний — выровнен.</b> «О проекте» — не пустое состояние, а полноценная страница с методикой, её не трогали. А вот Settings-без-Supabase раньше был самодельным центрированным текстом, теперь — тот же компонент EmptyState (иконка + заголовок + описание), что и на «Отчётах» при пустом журнале: один компонент вместо двух похожих, но разных вручную свёрстанных карточек. Заодно почистила лишние объяснения в тексте настроек и убрала самоочевидную фразу «все цифры реальные» на «Аналитике».</span></label>
+      <label class="item"><input type="checkbox" data-id="s2-1"><span class="item__text"><b>Полный проход по мобильной версии со скриншотами</b> — Пациенты, Миопия, Аналитика, Отчёты, карточка пациента, Помощь, Настройки, включая колокольчик уведомлений и кнопку «Скачать PDF» — на десктопе и на телефоне, для кейса нужны оба.</span></label>
+      <label class="item done"><input type="checkbox" data-id="s2-2" checked><span class="item__text"><b>Редактируемый профиль врача — решили не делать, и это осознанно.</b> Оказалось, что имя и специализация — не зона ответственности врача: их администрирует клиника при создании аккаунта. Вместо редактирования профиля добавили то, что врачу реально принадлежит, — смену пароля, с повторной проверкой старого перед сменой (важно для общего компьютера в кабинете).</span></label>
+      <label class="item done"><input type="checkbox" data-id="s2-3" checked><span class="item__text"><b>«Скачать PDF» и страница «Помощь» — готовы и работают.</b> Кнопка на карточке пациента печатает только график (без меню и шапки сайта) через системный диалог браузера и логирует факт экспорта в Supabase; рядом раздел «Помощь» с честным описанием того, как приложение реально работает, и прямой ссылкой «Сообщить о проблеме» на почту.</span></label>
+    </div>
+  </section>
+
+  <section class="module" data-section="3">
+    <div class="module__head">
+      <span class="module__title">5. Текст кейса</span>
+      <span class="effort">объёмно</span>
+    </div>
+    <p class="module__why">
+      У проекта уже есть редкая для портфолио вещь — настоящий сквозной принцип, а не просто набор
+      экранов: <b>честность по дизайну</b>. Несовпадение dt/duration между реальным CSV прибора и
+      исторической ergLEFT.txt не спрятано, а явно показано в интерфейсе. Уведомления считаются
+      из настоящих данных (расхождение классификации, реальный created_at), а не выдуманы для
+      красоты. Это и есть точка зрения, вокруг которой стоит написать кейс — а не просто
+      хронология «сделала эту страницу, потом эту».
+    </p>
+    <div class="checklist">
+      <label class="item"><input type="checkbox" data-id="s3-0"><span class="item__text"><b>Сформулировать «честность по дизайну» как явный принцип кейса</b> — с тремя конкретными примерами: dt/duration disclaimer при загрузке с прибора, колокольчик без выдуманной активности, пустое состояние вместо нуля вместо фейковых данных.</span></label>
+      <label class="item"><input type="checkbox" data-id="s3-1"><span class="item__text"><b>До/после по хедеру, настройкам и уведомлениям</b> — дублирующаяся иконка настроек в хедере и сайдбаре, декоративный аватар → рабочая ссылка на профиль, колокольчик без содержимого → два честных источника — уже готовый материал, нужны только скриншоты «было/стало».</span></label>
+      <label class="item"><input type="checkbox" data-id="s3-2"><span class="item__text"><b>Инженерная врезка про перенос алгоритма</b> — АЧХ/ФЧХ/ЛАЧХ портированы из оригинального C++/ROOT кода твоей ВКР в TypeScript, с явно задокументированными отступлениями (например, не перенесено точечное зануление артефактных бинов, завязанное на один конкретный сигнал). Для роли с уклоном в разработку — это ровно то, что отличает от чисто визуального портфолио.</span></label>
+      <label class="item"><input type="checkbox" data-id="s3-3"><span class="item__text"><b>Абзац про приватность данных как дизайн-решение</b> — Supabase Auth + RLS вместо статичного файла с реальными ФИО, синтетические личности в демо-режиме — это тоже продуктовое решение, а не только техническое.</span></label>
+      <label class="item"><input type="checkbox" data-id="s3-4"><span class="item__text"><b>Новый материал для кейса, который появился по ходу разработки</b> — решение не делать имя/специализацию редактируемыми (реальное продуктовое ограничение, не техническая недоделка), честная реализация PDF-экспорта без единой сторонней PDF-библиотеки, отдельно пересчитанная (а не переиспользованная из ВКР) точность классификации на «Аналитике». Это уже готовые примеры «честности по дизайну», нужно только написать.</span></label>
+    </div>
+  </section>
+
+  <section class="module" data-section="4">
+    <div class="module__head">
+      <span class="module__title">6. Собрать и показать</span>
+      <span class="effort">средне</span>
+    </div>
+    <p class="module__why">
+      Последний шаг — превратить рабочее приложение и текст кейса в страницу, на которую можно
+      дать ссылку.
+    </p>
+    <div class="checklist">
+      <label class="item"><input type="checkbox" data-id="s4-0"><span class="item__text"><b>Выбрать формат портфолио-страницы</b> — сайт, Notion или Figma-презентация — под остальные кейсы, которые уже есть.</span></label>
+      <label class="item"><input type="checkbox" data-id="s4-1"><span class="item__text"><b>Отобрать 5-7 ключевых экранов с подписями</b> — таблица Пациенты, карточка пациента с CSFChart, форма загрузки с прибора (с disclaimer), обновлённая Аналитика, колокольчик уведомлений.</span></label>
+      <label class="item"><input type="checkbox" data-id="s4-2"><span class="item__text"><b>Записать короткий скринкаст</b> — drag-zoom на графике и загрузка реального CSV с прибора смотрятся сильнее в движении, чем на статичном скриншоте.</span></label>
+      <label class="item"><input type="checkbox" data-id="s4-3"><span class="item__text"><b>Одно-абзацное summary для индекса портфолио</b> — задача, роль, инструменты, результат — то, что человек читает за 10 секунд перед тем, как решить открывать кейс целиком.</span></label>
+    </div>
+  </section>
+
+  <footer>ОЭРГ · план сборки портфолио · обновлено вручную, без дедлайна</footer>
+
+</div>
+
+<script>
+  (function () {
+    var STORAGE_KEY = 'erg-portfolio-plan-v1';
+    var boxes = Array.prototype.slice.call(document.querySelectorAll('.item input[type="checkbox"]'));
+    var state = {};
+
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) state = JSON.parse(raw) || {};
+    } catch (e) {}
+
+    function save() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+    }
+
+    function updateMeter() {
+      var done = boxes.filter(function (b) { return b.checked; }).length;
+      var total = boxes.length;
+      var pct = total ? Math.round((done / total) * 100) : 0;
+      document.getElementById('meterFill').style.width = pct + '%';
+      document.getElementById('meterLabel').textContent = done + ' / ' + total;
+    }
+
+    boxes.forEach(function (box) {
+      var id = box.getAttribute('data-id');
+      if (state[id]) {
+        box.checked = true;
+        box.closest('.item').classList.add('done');
+      }
+      box.addEventListener('change', function () {
+        state[id] = box.checked;
+        box.closest('.item').classList.toggle('done', box.checked);
+        save();
+        updateMeter();
+      });
+    });
+
+    updateMeter();
+  })();
+</script>

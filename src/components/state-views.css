@@ -1,0 +1,72 @@
+/* Пульсирующая заглушка вместо ещё не готовых данных. */
+.skeleton-block {
+  background: linear-gradient(90deg, var(--surface-muted) 25%, #eae8fb 37%, var(--surface-muted) 63%);
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+.chart-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 20px 24px;
+}
+
+.chart-skeleton__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Пустое/ошибочное состояние: иконка в кружке + заголовок + пояснение. */
+.state-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--muted);
+}
+
+.state-view__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.state-view__icon--muted {
+  background: var(--surface-muted);
+  color: var(--muted);
+}
+
+.state-view__icon--warn {
+  background: var(--warn-bg);
+  color: var(--warn-text);
+}
+
+.state-view__title {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.state-view__desc {
+  margin: 6px 0 0;
+  font-size: 13px;
+  max-width: 340px;
+  line-height: 1.5;
+}
