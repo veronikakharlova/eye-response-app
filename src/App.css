@@ -447,8 +447,6 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: var(--space-8) var(--space-14);
-  font-size: 14px;
-  color: var(--text);
 }
 
 /* Короткая оговорка прямо в карточке результата — рядом с бейджем, а не

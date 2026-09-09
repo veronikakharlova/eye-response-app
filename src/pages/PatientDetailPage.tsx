@@ -144,12 +144,16 @@ export default function PatientDetailPage() {
                 <strong>{patient.slopePFC.toFixed(2)} рад/Гц</strong>
               </div>
               <div>
+                {/* 2 знака, а не 1: НЧ/ВЧ ниже — отношение именно этих чисел,
+                    а на 1 знаке (18.9/1.6) оно на экране не сходится с тем,
+                    что показано в самом отношении (см. App.css-комментарий
+                    у .features__derived). */}
                 <span>НЧ (20-50 Гц)</span>
-                <strong>{patient.nf.toFixed(1)}</strong>
+                <strong>{patient.nf.toFixed(2)}</strong>
               </div>
               <div>
                 <span>ВЧ (51-81 Гц)</span>
-                <strong>{patient.vf.toFixed(1)}</strong>
+                <strong>{patient.vf.toFixed(2)}</strong>
               </div>
             </div>
             <div className="features__derived">
@@ -161,22 +165,34 @@ export default function PatientDetailPage() {
           <section className="result">
             <div className="result__fact">
               <span className="result__fact-label">Диагноз в базе</span>
-              <span className="result__fact-value">
-                {PATHOLOGY_LABELS[patient.pathology]}
-                {patient.note ? ` · ${patient.note}` : ''}
-              </span>
+              <span className="result__fact-value">{PATHOLOGY_LABELS[patient.pathology]}</span>
             </div>
 
+            {/* Раньше примечание из таблицы (не всегда просто возраст — иногда
+                там ещё травма или сопутствующий диагноз) приклеивалось к диагнозу
+                через " · ", как будто это один и тот же факт. Разные по смыслу
+                вещи, поэтому теперь отдельная строка с нейтральной подписью
+                "Заметка", а не "Возраст" — там не всегда только возраст. */}
+            {patient.note && (
+              <div className="result__fact">
+                <span className="result__fact-label">Заметка</span>
+                <span className="result__fact-value">{patient.note}</span>
+              </div>
+            )}
+
+            {/* Приведено к тому же паттерну "подпись сверху, значение снизу",
+                что и .result__fact выше — раньше здесь было отдельное
+                предложение без подписи, единственное такое место в карточке. */}
             <div className="result__classification">
               <div className="result__classification-row">
-                <span>
-                  Классификация методом городских кварталов ближе всего к группе{' '}
-                  <strong>{PATHOLOGY_LABELS[classification.nearest]}</strong>
-                </span>
+                <span className="result__fact-label">Классификация (метод городских кварталов)</span>
                 <span className={`badge ${isMatch ? 'badge--match' : 'badge--mismatch'}`}>
                   {isMatch ? 'Согласуется с диагнозом' : 'Рекомендован повторный осмотр'}
                 </span>
               </div>
+              <p className="result__fact-value" style={{ margin: 'var(--space-4) 0 0' }}>
+                Ближе всего к группе <strong>{PATHOLOGY_LABELS[classification.nearest]}</strong>
+              </p>
               <p className="result__classification-note">
                 <span aria-hidden="true">ⓘ</span>
                 Не диагноз, а ориентировочная сверка признаков. Точность метода на независимой выборке отдельно не подтверждена (подробнее ниже).

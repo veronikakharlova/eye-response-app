@@ -57,7 +57,8 @@ const NORM: PatientRecord[] = [
   { code: 'KSO', eye: 'L', pathology: 'norm', phase1: -1.84, slopePFC: 0.10, nfHf: 4.4, nf: 17.2, vf: 3.91 },
   { code: 'VDV', eye: 'R', pathology: 'norm', note: '24 года, справа — травма в детстве', phase1: -2.00, slopePFC: 0.11, nfHf: 5.1, nf: 25.0, vf: 4.86 },
   { code: 'VDV', eye: 'L', pathology: 'norm', phase1: -1.99, slopePFC: 0.11, nfHf: 4.3, nf: 18.4, vf: 4.26 },
-  { code: 'LO', eye: 'R', pathology: 'norm', note: '22 года, "нормальная миопия"', phase1: -0.87, slopePFC: 0.17, nfHf: 3.7, nf: 63.0, vf: 16.80 },
+  // nfHf было 3.7 — опечатка: 63.0 / 16.80 = 3.75, округляется до 3.8, а не 3.7.
+  { code: 'LO', eye: 'R', pathology: 'norm', note: '22 года, "нормальная миопия"', phase1: -0.87, slopePFC: 0.17, nfHf: 3.8, nf: 63.0, vf: 16.80 },
   { code: 'LO', eye: 'L', pathology: 'norm', note: '"нормальная миопия"', phase1: -0.67, slopePFC: 0.18, nfHf: 3.5, nf: 46.93, vf: 13.26 },
 ]
 
