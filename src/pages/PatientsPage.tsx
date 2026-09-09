@@ -6,7 +6,7 @@ import TableToolbar, { ActiveChip } from '../components/TableToolbar'
 import PatientFilterModal, { DEFAULT_PATIENT_FILTERS, PatientFilters } from '../components/PatientFilterModal'
 import AddPatientModal from '../components/AddPatientModal'
 import { EmptyState, ErrorState, TableSkeleton } from '../components/StateViews'
-import { PATHOLOGY_LABELS, Pathology, classifyPatient } from '../data/csfModel'
+import { PATHOLOGY_COLORS, PATHOLOGY_LABELS, Pathology, classifyPatient } from '../data/csfModel'
 import { usePatientsData } from '../lib/PatientsDataContext'
 import { FullPatient } from '../lib/backend'
 import { toPatientRecord } from '../lib/patientRecord'
@@ -195,7 +195,17 @@ export default function PatientsPage() {
                       <td>{r.fio ?? '—'}</td>
                       <td>{formatIsoToRu(r.dob) ?? '—'}</td>
                       <td>
-                        <span className="chip">{PATHOLOGY_LABELS[r.pathology]}</span>
+                        {/* Раньше все 4 группы патологий красились одним и тем же
+                            нейтральным .chip — цвет уже несёт этот смысл на
+                            AnalyticsPage (точки на графике, строки таблицы
+                            статистики), но не здесь, хотя группа та же самая.
+                            PATHOLOGY_COLORS теперь общий для обеих страниц. */}
+                        <span
+                          className="chip"
+                          style={{ background: `${PATHOLOGY_COLORS[r.pathology]}1a`, color: PATHOLOGY_COLORS[r.pathology] }}
+                        >
+                          {PATHOLOGY_LABELS[r.pathology]}
+                        </span>
                       </td>
                       <td>{r.eyes.map((e) => (e === 'R' ? 'Правый' : 'Левый')).join(', ')}</td>
                       <td>

@@ -2,23 +2,13 @@ import { useMemo } from 'react'
 import Plot from 'react-plotly.js'
 import Header from '../layout/Header'
 import { ChartSkeleton, ErrorState } from '../components/StateViews'
-import { PATHOLOGY_LABELS, PATHOLOGY_STATS, Pathology, classifyPatient } from '../data/csfModel'
+import { PATHOLOGY_COLORS, PATHOLOGY_LABELS, PATHOLOGY_STATS, Pathology, classifyPatient } from '../data/csfModel'
 import { usePatientsData } from '../lib/PatientsDataContext'
 import { toPatientRecord } from '../lib/patientRecord'
 import '../layout/layout.css'
 import '../App.css'
 
 const ORDER: Pathology[] = ['norm', 'myopia', 'amd', 'glaucoma']
-
-// Один цвет на группу патологии, одинаковый везде на странице (столбцы,
-// точки пациентов, подписи статистики) — так что цвет один раз выучивается
-// и потом читается сам, без обращения к легенде каждый раз заново.
-const PATHOLOGY_COLORS: Record<Pathology, string> = {
-  norm: '#2f9e6b',
-  myopia: '#3b82f6',
-  amd: '#d6336c',
-  glaucoma: '#f59e0b',
-}
 
 // На точечной диаграмме 4 группы отличаются только по цвету — для дальтоника
 // (особенно при путанице зелёный/оранжевый) это ненадёжно. Форма маркера —
