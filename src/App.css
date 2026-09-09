@@ -416,11 +416,13 @@
   padding: var(--space-2) var(--space-4);
 }
 
+/* Капс с разрядкой раньше был единственным на всей карточке — рядом с ней
+   такую же роль (подпись перед значением) играют .features__grid span и
+   .features__derived span, оба обычным регистром. Привели к тому же виду,
+   чтобы одна и та же роль не выглядела как два разных стиля. */
 .result__fact-label {
   font-size: 12px;
   color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
 }
 
 .result__fact-value {
@@ -491,9 +493,12 @@
   color: var(--warn-text);
 }
 
+/* Раньше был 13px — единственный такой размер на всю карточку, ни с чем не
+   переиспользуемый. У .result__classification-note ровно та же роль
+   (пояснительный текст помельче основного), поэтому свели к его 12px. */
 .result__caveat {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.5;
   margin: 0;
   padding: 0 var(--space-4);
