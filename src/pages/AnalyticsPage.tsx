@@ -43,6 +43,26 @@ function jitter(seed: string): number {
   return (((h >>> 0) % 1000) / 1000 - 0.5) * 0.56
 }
 
+// Коэффициент корреляции Пирсона — по нему подписываем график ниже числом,
+// а не только словом "корреляция": иначе это осталось бы утверждением на
+// глаз, без проверки.
+function pearson(xs: number[], ys: number[]): number {
+  const n = xs.length
+  const mx = xs.reduce((a, b) => a + b, 0) / n
+  const my = ys.reduce((a, b) => a + b, 0) / n
+  let num = 0
+  let dx2 = 0
+  let dy2 = 0
+  for (let i = 0; i < n; i++) {
+    const dx = xs[i] - mx
+    const dy = ys[i] - my
+    num += dx * dy
+    dx2 += dx * dx
+    dy2 += dy * dy
+  }
+  return num / Math.sqrt(dx2 * dy2)
+}
+
 export default function AnalyticsPage() {
   const { patients, loading, error } = usePatientsData()
 
@@ -56,6 +76,21 @@ export default function AnalyticsPage() {
   // разом, без ручного учёта диапазона каждой из 5 осей.
   const [stripResetKey, setStripResetKey] = useState(0)
 
+  // Диаграмма корреляции ниже — один общий (не сеточный, как у 5 панелей)
+  // график с реальным drag-зумом по обеим осям, поэтому тут — тот же
+  // принцип, что и у CSFChart: диапазон осей в стейте, undefined = авто,
+  // relayout при зуме заполняет его, "Сбросить" возвращает в undefined.
+  const [corrRange, setCorrRange] = useState<{ x?: [number, number]; y?: [number, number] }>({})
+  const handleCorrRelayout = (e: Record<string, unknown>) => {
+    const x0 = e['xaxis.range[0]']
+    const x1 = e['xaxis.range[1]']
+    const y0 = e['yaxis.range[0]']
+    const y1 = e['yaxis.range[1]']
+    if (typeof x0 === 'number' && typeof x1 === 'number' && typeof y0 === 'number' && typeof y1 === 'number') {
+      setCorrRange({ x: [x0, x1], y: [y0, y1] })
+    }
+  }
+
   // Все реальные визиты (глаз = один визит), а не только 4 средних по
   // группам — нужно для точечной диаграммы и для честного пересчёта
   // точности классификации на текущих данных, а не на цитате из ВКР.
@@ -63,6 +98,17 @@ export default function AnalyticsPage() {
     () => patients.flatMap((p) => p.records.map((r) => toPatientRecord(r, p.pathology))),
     [patients],
   )
+
+  // Именно эта пара признаков — не случайный выбор: по ней ниже на странице
+  // (см. последний абзац) уже была замечена монотонная связь с патологией.
+  // Число рядом с графиком делает это утверждение проверяемым, а не "на глаз".
+  const corrR = useMemo(() => {
+    if (records.length < 2) return null
+    return pearson(
+      records.map((r) => r.phase1),
+      records.map((r) => r.slopePFC),
+    )
+  }, [records])
 
   const accuracy = useMemo(() => {
     if (records.length === 0) return null
@@ -171,6 +217,46 @@ export default function AnalyticsPage() {
     }
   })
 
+  // Отдельный график именно для пары фаза 1-й гармоники × наклон ФЧХ — это
+  // не альтернатива панелям выше, а конкретно диаграмма корреляции: только
+  // 2 признака, оба на непрерывных осях, с легендой (тут она не в тягость —
+  // всего один график, а не сетка из пяти).
+  const corrTraces = [
+    ...ORDER.map((pathology) => {
+      const points = records.filter((r) => r.pathology === pathology)
+      return {
+        x: points.map((r) => r.phase1),
+        y: points.map((r) => r.slopePFC),
+        type: 'scatter' as const,
+        mode: 'markers' as const,
+        name: PATHOLOGY_LABELS[pathology],
+        marker: {
+          color: PATHOLOGY_COLORS[pathology],
+          symbol: PATHOLOGY_SYMBOLS[pathology],
+          size: pathology === 'amd' ? 8 : 7.5,
+          opacity: 0.8,
+        },
+        hovertemplate: `%{text}<br>Фаза 1-й гарм.: %{x}<br>Наклон ФЧХ: %{y}<extra></extra>`,
+        text: points.map((r) => `${r.code} ${r.eye} · ${PATHOLOGY_LABELS[pathology]}`),
+      }
+    }),
+    {
+      x: ORDER.map((p) => PATHOLOGY_STATS[p].mean.phase1),
+      y: ORDER.map((p) => PATHOLOGY_STATS[p].mean.slopePFC),
+      type: 'scatter' as const,
+      mode: 'markers' as const,
+      name: 'Среднее по группе',
+      marker: {
+        symbol: 'diamond',
+        size: 13,
+        color: ORDER.map((p) => PATHOLOGY_COLORS[p]),
+        line: { color: '#1f2430', width: 1.5 },
+      },
+      hovertemplate: '%{text}<extra></extra>',
+      text: ORDER.map((p) => `Среднее: ${PATHOLOGY_LABELS[p]}`),
+    },
+  ]
+
   return (
     <div>
       <Header title="Аналитика по группам патологий" />
@@ -246,6 +332,51 @@ export default function AnalyticsPage() {
             key={stripResetKey}
             data={stripTraces}
             layout={stripLayout}
+            config={{ displayModeBar: false, responsive: true }}
+            style={{ width: '100%' }}
+          />
+        )}
+      </div>
+
+      <div className="data-card" style={{ padding: 'var(--space-20) var(--space-24)', marginBottom: 'var(--space-20)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span className="panel__label" style={{ marginBottom: 0 }}>Корреляция: фаза 1-й гармоники × наклон ФЧХ</span>
+          <button type="button" className="chart__reset" style={{ marginLeft: 0 }} onClick={() => setCorrRange({})}>
+            Сбросить
+          </button>
+        </div>
+        <p style={{ margin: 'var(--space-4) 0 var(--space-4)', fontSize: 13, color: 'var(--muted)' }}>
+          Именно эти два признака растут в одном порядке патологий (см. абзац ниже) — здесь эта связь показана напрямую, а не через 5 отдельных панелей.
+          {corrR !== null && (
+            <>
+              {' '}Коэффициент корреляции Пирсона: <strong>{corrR.toFixed(2)}</strong>.
+            </>
+          )}
+        </p>
+        {loading ? (
+          <ChartSkeleton height={420} />
+        ) : error ? (
+          <ErrorState title="Не удалось загрузить пациентов" description={error} />
+        ) : (
+          <Plot
+            data={corrTraces}
+            layout={{
+              height: 420,
+              margin: { t: 10, r: 16, b: 50, l: 60 },
+              font: { family: 'Inter, system-ui, sans-serif', size: 12 },
+              paper_bgcolor: 'rgba(0,0,0,0)',
+              plot_bgcolor: 'rgba(0,0,0,0)',
+              legend: { orientation: 'h', y: -0.18 },
+              xaxis: {
+                title: 'Фаза 1-й гармоники, рад',
+                ...(corrRange.x ? { range: corrRange.x } : { autorange: true }),
+              },
+              yaxis: {
+                title: 'Наклон ФЧХ, рад/Гц',
+                ...(corrRange.y ? { range: corrRange.y } : { autorange: true }),
+              },
+            }}
+            onRelayout={handleCorrRelayout}
             config={{ displayModeBar: false, responsive: true }}
             style={{ width: '100%' }}
           />
