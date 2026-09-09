@@ -527,15 +527,6 @@
   margin: 0;
 }
 
-/* Свёрнуто по умолчанию — видно первые 2 строки, весь текст остаётся в
-   разметке (не теряется), просто раскрывается по клику. */
-.result__caveat--collapsed {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
 .result__caveat-label {
   color: var(--text);
   font-weight: 600;

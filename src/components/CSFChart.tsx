@@ -55,8 +55,31 @@ export default function CSFChart({ patient, range = [1, 90], onRangeChange, heig
   // на логарифмической оси в декадах (стр. 62: "по оси абсцисс… декада —
   // изменение частоты в 10 раз"; Рисунок 4.20 — метки ровно 1, 10, 10²).
   // Поэтому здесь два разных масштаба, а не один общий на все три графика.
+  // Сама логарифмическая шкала (декады) — из ВКР, но подписи внутри декады
+  // (2, 5, 20, 50…) добавлены сверх оригинала: с подписями только на
+  // 1/10/100 ось выглядела заметно "реже" двух других панелей.
   const linRange: [number, number] = [range[0], range[1]]
   const logRange: [number, number] = [Math.log10(Math.max(range[0], 0.1)), Math.log10(Math.max(range[1], range[0] + 0.1))]
+  // Plotly умеет подписывать лог-ось делениями "1-2-5" (dtick: 'D2'), но
+  // для тиков за пределами первой декады подписывает их голой мантиссой —
+  // "2" и "5" вместо "20" и "50", неотличимо от настоящих 2 и 5 Гц в первой
+  // декаде. Поэтому считаем деления сами и задаём подписи явно (tickvals/
+  // ticktext) — только 1-2-5 внутри каждой декады, попадающие в видимый
+  // диапазон, всегда полным числом.
+  const lachTicks = (() => {
+    const lo = Math.max(range[0], 0.1)
+    const hi = Math.max(range[1], lo + 0.1)
+    const startDecade = Math.floor(Math.log10(lo))
+    const endDecade = Math.ceil(Math.log10(hi))
+    const vals: number[] = []
+    for (let d = startDecade; d <= endDecade; d++) {
+      for (const m of [1, 2, 5]) {
+        const v = m * Math.pow(10, d)
+        if (v >= lo * 0.999 && v <= hi * 1.001) vals.push(v)
+      }
+    }
+    return { vals, text: vals.map((v) => (v >= 1 ? String(Math.round(v)) : String(v))) }
+  })()
 
   const handleRelayout = (event: Record<string, unknown>) => {
     // АЧХ (xaxis) и ФЧХ (xaxis3) — линейные, значения уже в Гц.
@@ -206,24 +229,36 @@ export default function CSFChart({ patient, range = [1, 90], onRangeChange, heig
         legend: { ...legendBase, y: 1, yanchor: 'top' },
         // АЧХ и ФЧХ — линейная ось, деления через 5 Гц (как в оригинальной
         // ВКР), и они синхронизированы друг с другом (matches). ЛАЧХ — своя,
-        // логарифмическая ось: подписаны только декады (1, 10, 100), а 2…9
-        // внутри декады — мелкими штрихами без подписи (minor). Заголовок
+        // логарифмическая ось (подробнее у xaxis2 ниже). Заголовок
+        // "Частота, Гц" один, под самым нижним графиком.
         // "Частота, Гц" один, под самым нижним графиком.
         xaxis: {
           type: 'linear', domain: [0, 1], anchor: 'y', range: linRange,
           dtick: 5, matches: 'x3',
         },
-        yaxis: { title: 'АЧХ (реконструкция)', domain: [0.68, 1] },
+        // nticks — ориентир на одинаковое число подписанных делений на всех
+        // трёх панелях. Раньше на ЛАЧХ Plotly сам выбирал шаг в 50 дБ (2-3
+        // деления на всю панель) — заметно реже, чем у АЧХ и ФЧХ (там
+        // получалось 5-6). Единицы у панелей разные (дБ / рад / АЧХ), общий
+        // числовой шаг между ними не имеет смысла — но одинаковая ГУСТОТА
+        // делений держит все три панели визуально согласованными.
+        yaxis: { title: 'АЧХ (реконструкция)', domain: [0.68, 1], nticks: 6 },
+        // Раньше на ЛАЧХ были подписаны только декады (1, 10, 100, dtick: 1)
+        // — на диапазоне до 90 это всего 2 подписанных деления на всю ось,
+        // заметно реже остальных панелей. lachTicks (см. выше) даёт деления
+        // 1-2-5 внутри каждой декады (1, 2, 5, 10, 20, 50…) с полными
+        // подписями; мелкие непронумерованные — как раньше, через minor.
         xaxis2: {
           type: 'log', domain: [0, 1], anchor: 'y2', range: logRange,
-          dtick: 1, minor: { dtick: 'D1', ticks: 'outside', ticklen: 4, showgrid: true, gridcolor: '#eef1f6' },
+          tickmode: 'array', tickvals: lachTicks.vals, ticktext: lachTicks.text,
+          minor: { dtick: 'D1', ticks: 'outside', ticklen: 4, showgrid: true, gridcolor: '#eef1f6' },
         },
-        yaxis2: { title: 'ЛАЧХ, дБ', domain: [0.34, 0.62] },
+        yaxis2: { title: 'ЛАЧХ, дБ', domain: [0.34, 0.62], nticks: 6 },
         xaxis3: {
           type: 'linear', title: 'Частота, Гц', domain: [0, 1], anchor: 'y3', range: linRange,
           dtick: 5,
         },
-        yaxis3: { title: 'ФЧХ, рад', domain: [0, 0.28] },
+        yaxis3: { title: 'ФЧХ, рад', domain: [0, 0.28], nticks: 6 },
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: 'rgba(0,0,0,0)',
       }}
