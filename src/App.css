@@ -52,6 +52,12 @@
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: var(--space-16);
+  /* Общая ширина колонки подписи для .features__derived и .result__fact —
+     подобрана под самую длинную подпись из этой группы, "НЧ / ВЧ
+     (отношение)", без переноса на 12px. Единое число в обоих местах — это
+     и есть то, что делает выравнивание по правому краю похожим на
+     реальную таблицу, а не на два независимых прижатых к краю значения. */
+  --kv-label-w: 168px;
 }
 
 .sidebar > section + section {
@@ -398,17 +404,22 @@
    в общей куче), теперь — тонкой чертой сверху, как между секциями самого
    сайдбара (.sidebar > section + section): тот же приём для того же смысла
    "дальше — отдельное", без лишней коробки. */
-/* Раньше justify-content: space-between прижимало число к правому краю —
-   единственная строка в сайдбаре с таким выравниванием: у "Диагноз в
-   базе", "Заметка" и остальных значение стоит сразу после подписи, слева.
-   Привели к тому же — label + gap, без растягивания по всей ширине. */
+/* Пробуем настоящую табличную раскладку: общая ширина колонки подписи у
+   .features__derived и .result__fact ниже (--kv-label-w) — тогда значения
+   в разных строках визуально выстраиваются в одну вертикальную линию по
+   правому краю, как в чеке/спецификации, а не просто "значение сразу после
+   подписи". Раньше здесь был justify-content: space-between — но он
+   прижимал число к правому краю только в ЭТОЙ строке, без общей колонки
+   с остальными подписями, из-за чего "11.2" и "Норма" оказывались на
+   разных X-координатах — рваный, а не выровненный ряд. */
 .features__derived {
   margin-top: var(--space-12);
   padding-top: var(--space-10);
   border-top: 1px solid var(--border);
-  display: flex;
+  display: grid;
+  grid-template-columns: var(--kv-label-w) 1fr;
   align-items: baseline;
-  gap: var(--space-8);
+  column-gap: var(--space-8);
 }
 
 .features__derived span {
@@ -419,6 +430,7 @@
 .features__derived strong {
   font-size: 16px;
   font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 
 .result {
@@ -433,10 +445,10 @@
    строки без паддинга ("Классификация…", НЧ/ВЧ) — левый край всей карточки
    "гулял". Паддинг убрали, все строки теперь у одного края. */
 .result__fact {
-  display: flex;
+  display: grid;
+  grid-template-columns: var(--kv-label-w) 1fr;
   align-items: baseline;
-  flex-wrap: wrap;
-  gap: var(--space-8);
+  column-gap: var(--space-8);
 }
 
 /* Капс с разрядкой раньше был единственным на всей карточке — рядом с ней
@@ -452,6 +464,11 @@
   font-size: 14px;
   color: var(--text);
   font-weight: 600;
+  text-align: right;
+}
+
+.result__fact-value--note {
+  text-align: left;
 }
 
 /* Раньше здесь была синяя полоска слева — убрали, чтобы карточка не

@@ -176,7 +176,14 @@ export default function PatientDetailPage() {
             {patient.note && (
               <div className="result__fact">
                 <span className="result__fact-label">Заметка</span>
-                <span className="result__fact-value">{patient.note}</span>
+                {/* Диагноз и НЧ/ВЧ — всегда короткое слово или число, для них
+                    выравнивание по правому краю и даёт ту самую "таблицу".
+                    Заметка — вольный текст из исходной таблицы, бывает
+                    длинным (см. App.css у .result__fact-value--note): если
+                    его так же прижать вправо, при переносе на 2-3 строки
+                    получается рваный левый край абзаца — читать труднее,
+                    чем просто слева. */}
+                <span className="result__fact-value result__fact-value--note">{patient.note}</span>
               </div>
             )}
 
