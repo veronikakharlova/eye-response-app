@@ -375,6 +375,10 @@
 
 .features__grid strong {
   font-size: 16px;
+  /* Легче общего веса strong (600): по референсу число само по себе не
+     должно быть жирным — вес несёт размер (16px) и табличные цифры, а не
+     насыщенность начертания. */
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
 
@@ -398,6 +402,10 @@
 
 .features__derived strong {
   font-size: 16px;
+  /* То же снижение веса, что и у .features__grid strong — это те же по
+     роли числа (только вынесенные в отдельную строку), должны выглядеть
+     одинаково. */
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
 

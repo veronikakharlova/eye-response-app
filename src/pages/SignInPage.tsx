@@ -68,7 +68,7 @@ export default function SignInPage() {
           </svg>
         </div>
 
-        <h1 style={{ fontSize: 19, fontWeight: 500, margin: '0 0 var(--space-4)' }}>Вход врача</h1>
+        <h1 style={{ fontSize: 19, fontWeight: 600, margin: '0 0 var(--space-4)' }}>Вход врача</h1>
         <p className="page-subtitle" style={{ margin: '0 0 var(--space-20)' }}>
           Частотная характеристика сетчатки. Доступ только для авторизованных.
         </p>
