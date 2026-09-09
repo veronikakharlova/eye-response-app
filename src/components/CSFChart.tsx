@@ -32,9 +32,9 @@ const NORM_COLOR = '#94a3b8'
  * График в стиле диаграммы Боде: АЧХ, ЛАЧХ (=20*log10(АЧХ), дБ), ФЧХ.
  * Сплошная линия — реконструированная кривая под реальные признаки
  * выбранного пациента, пунктир — реконструкция под средние признаки
- * группы "Норма" (референс для сравнения). У каждого графика — своя
- * локальная легенда (Plotly legend/legend2/legend3), чтобы график был
- * понятен сам по себе, без необходимости искать подпись у соседней панели.
+ * группы "Норма" (референс для сравнения). Легенда одна, общая для всех
+ * трёх панелей (раньше была своя под каждой — три одинаковые подряд,
+ * это те же две линии одного смысла и цвета, повторять было избыточно).
  */
 export default function CSFChart({ patient, range = [1, 90], onRangeChange, height = 505 }: Props) {
   // Plotly реально грузится и инициализируется асинхронно (движок графика —
@@ -117,7 +117,7 @@ export default function CSFChart({ patient, range = [1, 90], onRangeChange, heig
           type: 'scatter',
           mode: 'lines',
           name: 'Норма',
-          legendgroup: 'series',
+          legendgroup: 'norm',
           legend: 'legend',
           line: { color: NORM_COLOR, dash: 'dot', width: 2 },
           xaxis: 'x',
@@ -129,20 +129,28 @@ export default function CSFChart({ patient, range = [1, 90], onRangeChange, heig
           type: 'scatter',
           mode: 'lines',
           name: patientLabel,
-          legendgroup: 'series',
+          legendgroup: 'patient',
           legend: 'legend',
           line: { color: PATIENT_COLOR, width: 3 },
           xaxis: 'x',
           yaxis: 'y',
         },
+        // Начиная отсюда — те же две серии (Норма / пациент) на двух других
+        // панелях. showlegend: false у них, а не отдельная легенда на
+        // каждую панель, как было раньше: линии эти же самые по смыслу
+        // (тот же цвет, тот же пациент), повторять подпись три раза подряд
+        // избыточно. legendgroup общий с первой парой — клик по одной
+        // записи в общей легенде наверху всё равно скрывает/показывает
+        // линию на всех трёх графиках сразу.
         {
           x: freqs,
           y: refLogAmps,
           type: 'scatter',
           mode: 'lines',
           name: 'Норма',
-          legendgroup: 'series',
-          legend: 'legend2',
+          legendgroup: 'norm',
+          legend: 'legend',
+          showlegend: false,
           line: { color: NORM_COLOR, dash: 'dot', width: 2 },
           xaxis: 'x2',
           yaxis: 'y2',
@@ -153,8 +161,9 @@ export default function CSFChart({ patient, range = [1, 90], onRangeChange, heig
           type: 'scatter',
           mode: 'lines',
           name: patientLabel,
-          legendgroup: 'series',
-          legend: 'legend2',
+          legendgroup: 'patient',
+          legend: 'legend',
+          showlegend: false,
           line: { color: PATIENT_COLOR, width: 3 },
           xaxis: 'x2',
           yaxis: 'y2',
@@ -165,8 +174,9 @@ export default function CSFChart({ patient, range = [1, 90], onRangeChange, heig
           type: 'scatter',
           mode: 'lines',
           name: 'Норма',
-          legendgroup: 'series',
-          legend: 'legend3',
+          legendgroup: 'norm',
+          legend: 'legend',
+          showlegend: false,
           line: { color: NORM_COLOR, dash: 'dot', width: 2 },
           xaxis: 'x3',
           yaxis: 'y3',
@@ -177,8 +187,9 @@ export default function CSFChart({ patient, range = [1, 90], onRangeChange, heig
           type: 'scatter',
           mode: 'lines',
           name: patientLabel,
-          legendgroup: 'series',
-          legend: 'legend3',
+          legendgroup: 'patient',
+          legend: 'legend',
+          showlegend: false,
           line: { color: PATIENT_COLOR, width: 3 },
           xaxis: 'x3',
           yaxis: 'y3',
@@ -190,9 +201,9 @@ export default function CSFChart({ patient, range = [1, 90], onRangeChange, heig
         margin: { t: 24, r: 20, b: 38, l: 56 },
         font: { family: 'Inter, system-ui, sans-serif', size: 13 },
         showlegend: true,
+        // Одна общая легенда на все три графика, наверху, вместо трёх
+        // одинаковых по смыслу подряд — те же две линии, тот же цвет.
         legend: { ...legendBase, y: 1, yanchor: 'top' },
-        legend2: { ...legendBase, y: 0.62 },
-        legend3: { ...legendBase, y: 0.28 },
         // АЧХ и ФЧХ — линейная ось, деления через 5 Гц (как в оригинальной
         // ВКР), и они синхронизированы друг с другом (matches). ЛАЧХ — своя,
         // логарифмическая ось: подписаны только декады (1, 10, 100), а 2…9
