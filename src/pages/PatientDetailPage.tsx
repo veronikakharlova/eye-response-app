@@ -190,8 +190,15 @@ export default function PatientDetailPage() {
                   {isMatch ? 'Согласуется с диагнозом' : 'Рекомендован повторный осмотр'}
                 </span>
               </div>
-              <p className="result__fact-value" style={{ margin: 'var(--space-4) 0 0' }}>
-                Ближе всего к группе <strong>{PATHOLOGY_LABELS[classification.nearest]}</strong>
+              {/* Раньше было жирным .result__fact-value — тем же стилем, что и
+                  "Диагноз в базе" выше. Но это не факт из базы, а прикидка
+                  метода с известной низкой точностью (~50%, см. оговорку
+                  ниже) — жирный тёмный текст выглядел увереннее, чем метод
+                  того заслуживает. Приглушили вес, оставили читаемым только
+                  название группы. */}
+              <p style={{ margin: 'var(--space-4) 0 0', fontSize: 13.5, color: 'var(--muted)' }}>
+                Ближе всего к группе{' '}
+                <strong style={{ color: 'var(--text)' }}>{PATHOLOGY_LABELS[classification.nearest]}</strong>
               </p>
               <p className="result__classification-note">
                 <span aria-hidden="true">ⓘ</span>
