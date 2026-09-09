@@ -398,13 +398,17 @@
    в общей куче), теперь — тонкой чертой сверху, как между секциями самого
    сайдбара (.sidebar > section + section): тот же приём для того же смысла
    "дальше — отдельное", без лишней коробки. */
+/* Раньше justify-content: space-between прижимало число к правому краю —
+   единственная строка в сайдбаре с таким выравниванием: у "Диагноз в
+   базе", "Заметка" и остальных значение стоит сразу после подписи, слева.
+   Привели к тому же — label + gap, без растягивания по всей ширине. */
 .features__derived {
   margin-top: var(--space-12);
   padding-top: var(--space-10);
   border-top: 1px solid var(--border);
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-8);
 }
 
 .features__derived span {
