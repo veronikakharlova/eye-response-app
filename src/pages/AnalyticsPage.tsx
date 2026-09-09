@@ -31,26 +31,30 @@ const FEATURES: { key: FeatureKey; title: string }[] = [
   { key: 'vf', title: 'ВЧ (51-81 Гц)' },
 ]
 
+// Детерминированный псевдослучайный сдвиг точки по X внутри своей колонки
+// (jitter) — тот же пациент/глаз/признак всегда получает один и тот же
+// сдвиг, чтобы точки не "прыгали" между перерисовками. Не настоящий
+// beeswarm с раскладкой без наложений, а простой хэш-джиттер — для 12-17
+// точек на группу этого достаточно, чтобы отличить кучу точек друг от
+// друга, не считая коллизии всерьёз.
+function jitter(seed: string): number {
+  let h = 0
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) | 0
+  return (((h >>> 0) % 1000) / 1000 - 0.5) * 0.56
+}
+
 export default function AnalyticsPage() {
   const { patients, loading, error } = usePatientsData()
 
-  // config={{ displayModeBar: false }} на точечной диаграмме ниже (как и на
-  // остальных графиках приложения — свой минималистичный "Сбросить" вместо
-  // родного тулбара Plotly) прячет и штатную кнопку "Reset axes". Значит,
-  // приблизив график перетаскиванием (box-zoom), вернуться к исходному виду
-  // было нечем — только обновить страницу. Ведём диапазон осей в стейте по
-  // тому же принципу, что и диапазон частот у CSFChart: undefined = авто,
-  // relayout при зуме заполняет его, кнопка "Сбросить" возвращает в undefined.
-  const [scatterRange, setScatterRange] = useState<{ x?: [number, number]; y?: [number, number] }>({})
-  const handleScatterRelayout = (e: Record<string, unknown>) => {
-    const x0 = e['xaxis.range[0]']
-    const x1 = e['xaxis.range[1]']
-    const y0 = e['yaxis.range[0]']
-    const y1 = e['yaxis.range[1]']
-    if (typeof x0 === 'number' && typeof x1 === 'number' && typeof y0 === 'number' && typeof y1 === 'number') {
-      setScatterRange({ x: [x0, x1], y: [y0, y1] })
-    }
-  }
+  // config={{ displayModeBar: false }} на графике ниже (как и на остальных
+  // графиках приложения — свой минималистичный "Сбросить" вместо родного
+  // тулбара Plotly) прячет и штатную кнопку "Reset axes". У 5 независимых
+  // панелей в одной сетке отслеживать диапазон каждой оси в стейте отдельно
+  // (как у CSFChart с одним графиком) — накладно, а свой зум почти всегда
+  // разбирают "все панели сразу". Проще: одна кнопка форсит remount графика
+  // через key — сбрасывает весь внутренний стейт Plotly (в том числе зум)
+  // разом, без ручного учёта диапазона каждой из 5 осей.
+  const [stripResetKey, setStripResetKey] = useState(0)
 
   // Все реальные визиты (глаз = один визит), а не только 4 средних по
   // группам — нужно для точечной диаграммы и для честного пересчёта
@@ -97,41 +101,75 @@ export default function AnalyticsPage() {
     barLayout[`xaxis${n}`] = { tickfont: { size: 10.5 } }
   })
 
-  const scatterTraces = [
-    ...ORDER.map((pathology) => {
+  // Раньше тут была одна диаграмма рассеяния на 2 признака (фаза 1-й
+  // гармоники × наклон ФЧХ) с 4 группами, различимыми только цветом/формой
+  // в одном поле — группы сильно перекрывались, а остальные 3 признака
+  // (НЧ/ВЧ, НЧ, ВЧ) в неё не попадали вовсе. Разнесли по той же сетке
+  // 2×3, что и график средних: 5 панелей, в каждой — 4 колонки-группы по
+  // оси X (не наложение, а соседство), точки — реальные визиты с джиттером,
+  // ромб — то же среднее, что было в диаграмме рассеяния и в таблице выше.
+  const stripTraces = FEATURES.flatMap((f, i) => {
+    const n = i === 0 ? '' : String(i + 1)
+    const xaxis = `x${n}`
+    const yaxis = `y${n}`
+    const pointTraces = ORDER.map((pathology, gi) => {
       const points = records.filter((r) => r.pathology === pathology)
       return {
-        x: points.map((r) => r.phase1),
-        y: points.map((r) => r.slopePFC),
+        x: points.map((r) => gi + jitter(`${r.code}${r.eye}${f.key}`)),
+        y: points.map((r) => r[f.key]),
         type: 'scatter' as const,
         mode: 'markers' as const,
-        name: PATHOLOGY_LABELS[pathology],
         marker: {
           color: PATHOLOGY_COLORS[pathology],
           symbol: PATHOLOGY_SYMBOLS[pathology],
-          size: pathology === 'amd' ? 9 : 8,
+          size: pathology === 'amd' ? 7 : 6.5,
           opacity: 0.75,
         },
-        hovertemplate: '%{text}<br>фаза 1: %{x}<br>наклон ФЧХ: %{y}<extra></extra>',
-        text: points.map((r) => `${r.code} ${r.eye}`),
+        xaxis,
+        yaxis,
+        showlegend: false,
+        hovertemplate: `%{text}<br>${f.title}: %{y}<extra></extra>`,
+        text: points.map((r) => `${r.code} ${r.eye} · ${PATHOLOGY_LABELS[pathology]}`),
       }
-    }),
-    {
-      x: ORDER.map((p) => PATHOLOGY_STATS[p].mean.phase1),
-      y: ORDER.map((p) => PATHOLOGY_STATS[p].mean.slopePFC),
+    })
+    const meanTrace = {
+      x: ORDER.map((_, gi) => gi),
+      y: ORDER.map((p) => PATHOLOGY_STATS[p].mean[f.key]),
       type: 'scatter' as const,
       mode: 'markers' as const,
-      name: 'Среднее по группе',
       marker: {
         symbol: 'diamond',
-        size: 15,
+        size: 12,
         color: ORDER.map((p) => PATHOLOGY_COLORS[p]),
         line: { color: '#1f2430', width: 1.5 },
       },
+      xaxis,
+      yaxis,
+      showlegend: false,
       hovertemplate: '%{text}<extra></extra>',
       text: ORDER.map((p) => `Среднее: ${PATHOLOGY_LABELS[p]}`),
-    },
-  ]
+    }
+    return [...pointTraces, meanTrace]
+  })
+
+  const stripLayout: Record<string, unknown> = {
+    grid: { rows: 2, columns: 3, pattern: 'independent' as const },
+    height: 460,
+    margin: { t: 10, r: 16, b: 40, l: 50 },
+    font: { family: 'Inter, system-ui, sans-serif', size: 12 },
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor: 'rgba(0,0,0,0)',
+  }
+  FEATURES.forEach((f, i) => {
+    const n = i === 0 ? '' : String(i + 1)
+    stripLayout[`yaxis${n}`] = { title: f.title, titlefont: { size: 11 } }
+    stripLayout[`xaxis${n}`] = {
+      tickvals: [0, 1, 2, 3],
+      ticktext: ORDER.map((p) => PATHOLOGY_LABELS[p]),
+      range: [-0.6, 3.6],
+      tickfont: { size: 9.5 },
+    }
+  })
 
   return (
     <div>
@@ -192,39 +230,24 @@ export default function AnalyticsPage() {
       <div className="data-card" style={{ padding: 'var(--space-20) var(--space-24)', marginBottom: 'var(--space-20)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <span className="panel__label" style={{ marginBottom: 0 }}>Пациенты по признакам (не только средние)</span>
-          <button type="button" className="chart__reset" style={{ marginLeft: 0 }} onClick={() => setScatterRange({})}>
+          <button type="button" className="chart__reset" style={{ marginLeft: 0 }} onClick={() => setStripResetKey((k) => k + 1)}>
             Сбросить
           </button>
         </div>
         <p style={{ margin: 'var(--space-4) 0 var(--space-4)', fontSize: 13, color: 'var(--muted)' }}>
-          Каждая точка — один визит (глаз) одного пациента, ромбы — средние по группе. Группы сильно перекрываются между собой: таблица выше показывает только средние и скрывает этот разброс.
+          Каждая точка — один визит (глаз) одного пациента, ромбы — средние по группе. Группы разнесены по колонкам вместо наложения на одном поле: таблица выше показывает только средние и скрывает этот разброс.
         </p>
         {loading ? (
-          <ChartSkeleton height={420} />
+          <ChartSkeleton height={460} />
         ) : error ? (
           <ErrorState title="Не удалось загрузить пациентов" description={error} />
         ) : (
           <Plot
-            data={scatterTraces}
-            layout={{
-              height: 420,
-              margin: { t: 16, r: 16, b: 48, l: 56 },
-              font: { family: 'Inter, system-ui, sans-serif', size: 12 },
-              xaxis: {
-                title: 'Фаза 1-й гармоники, рад',
-                ...(scatterRange.x ? { range: scatterRange.x } : { autorange: true }),
-              },
-              yaxis: {
-                title: 'Наклон ФЧХ, рад/Гц',
-                ...(scatterRange.y ? { range: scatterRange.y } : { autorange: true }),
-              },
-              legend: { orientation: 'h', y: -0.22 },
-              paper_bgcolor: 'rgba(0,0,0,0)',
-              plot_bgcolor: 'rgba(0,0,0,0)',
-            }}
+            key={stripResetKey}
+            data={stripTraces}
+            layout={stripLayout}
             config={{ displayModeBar: false, responsive: true }}
             style={{ width: '100%' }}
-            onRelayout={handleScatterRelayout}
           />
         )}
       </div>
