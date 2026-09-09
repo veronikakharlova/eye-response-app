@@ -257,27 +257,27 @@ export default function PatientDetailPage() {
             />
           </section>
 
-          <section className="data-card" style={{ padding: 'var(--space-20) var(--space-24)', marginTop: 'var(--space-20)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
-              {/* marginBottom обнулён: тут подпись стоит в одной строке с кнопкой,
-                  а не над отдельным блоком контента, обычный отступ снизу тут не нужен. */}
-              <span className="panel__label" style={{ marginBottom: 0 }}>
-                Динамика по визитам ({eye === 'R' ? 'правый глаз' : 'левый глаз'})
-              </span>
-              <button type="button" className="page-btn" onClick={() => setAddVisitOpen(true)}>
-                + Добавить визит
-              </button>
-            </div>
-            {eyeVisits.length > 1 ? (
+          {/* Пока у всех пациентов в базе по одному визиту, эта карточка на
+              каждой странице показывала бы только заглушку "тренд появится
+              позже" — то есть один и тот же неинформативный текст везде.
+              Убрали её целиком (вместе с кнопкой "+Добавить визит"), пока
+              визитов реально не станет 2+ — тогда карточка и кнопка вернутся
+              сами, без отдельного решения показывать/не показывать. */}
+          {eyeVisits.length > 1 && (
+            <section className="data-card" style={{ padding: 'var(--space-20) var(--space-24)', marginTop: 'var(--space-20)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+                {/* marginBottom обнулён: тут подпись стоит в одной строке с кнопкой,
+                    а не над отдельным блоком контента, обычный отступ снизу тут не нужен. */}
+                <span className="panel__label" style={{ marginBottom: 0 }}>
+                  Динамика по визитам ({eye === 'R' ? 'правый глаз' : 'левый глаз'})
+                </span>
+                <button type="button" className="page-btn" onClick={() => setAddVisitOpen(true)}>
+                  + Добавить визит
+                </button>
+              </div>
               <VisitTrendChart visits={eyeVisits} />
-            ) : (
-              <p style={{ margin: 'var(--space-10) var(--space-2) 0', fontSize: 13.5, color: 'var(--muted)' }}>
-                Пока в базе только {eyeVisits.length === 1 ? 'один визит' : 'нет визитов'} для этого глаза — тренд
-                появится, когда визитов станет хотя бы два. Одну точку без сравнения показывать не стали, чтобы
-                не выдавать за динамику то, чего ещё нет.
-              </p>
-            )}
-          </section>
+            </section>
+          )}
         </main>
       </div>
 
