@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import Plot from 'react-plotly.js'
 import Header from '../layout/Header'
 import { ChartSkeleton, ErrorState } from '../components/StateViews'
@@ -33,6 +33,24 @@ const FEATURES: { key: FeatureKey; title: string }[] = [
 
 export default function AnalyticsPage() {
   const { patients, loading, error } = usePatientsData()
+
+  // config={{ displayModeBar: false }} на точечной диаграмме ниже (как и на
+  // остальных графиках приложения — свой минималистичный "Сбросить" вместо
+  // родного тулбара Plotly) прячет и штатную кнопку "Reset axes". Значит,
+  // приблизив график перетаскиванием (box-zoom), вернуться к исходному виду
+  // было нечем — только обновить страницу. Ведём диапазон осей в стейте по
+  // тому же принципу, что и диапазон частот у CSFChart: undefined = авто,
+  // relayout при зуме заполняет его, кнопка "Сбросить" возвращает в undefined.
+  const [scatterRange, setScatterRange] = useState<{ x?: [number, number]; y?: [number, number] }>({})
+  const handleScatterRelayout = (e: Record<string, unknown>) => {
+    const x0 = e['xaxis.range[0]']
+    const x1 = e['xaxis.range[1]']
+    const y0 = e['yaxis.range[0]']
+    const y1 = e['yaxis.range[1]']
+    if (typeof x0 === 'number' && typeof x1 === 'number' && typeof y0 === 'number' && typeof y1 === 'number') {
+      setScatterRange({ x: [x0, x1], y: [y0, y1] })
+    }
+  }
 
   // Все реальные визиты (глаз = один визит), а не только 4 средних по
   // группам — нужно для точечной диаграммы и для честного пересчёта
@@ -172,8 +190,13 @@ export default function AnalyticsPage() {
       </div>
 
       <div className="data-card" style={{ padding: 'var(--space-20) var(--space-24)', marginBottom: 'var(--space-20)' }}>
-        <span className="panel__label">Пациенты по признакам (не только средние)</span>
-        <p style={{ margin: '0 0 var(--space-4)', fontSize: 13, color: 'var(--muted)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span className="panel__label" style={{ marginBottom: 0 }}>Пациенты по признакам (не только средние)</span>
+          <button type="button" className="chart__reset" style={{ marginLeft: 0 }} onClick={() => setScatterRange({})}>
+            Сбросить
+          </button>
+        </div>
+        <p style={{ margin: 'var(--space-4) 0 var(--space-4)', fontSize: 13, color: 'var(--muted)' }}>
           Каждая точка — один визит (глаз) одного пациента, ромбы — средние по группе. Группы сильно перекрываются между собой: таблица выше показывает только средние и скрывает этот разброс.
         </p>
         {loading ? (
@@ -187,14 +210,21 @@ export default function AnalyticsPage() {
               height: 420,
               margin: { t: 16, r: 16, b: 48, l: 56 },
               font: { family: 'Inter, system-ui, sans-serif', size: 12 },
-              xaxis: { title: 'Фаза 1-й гармоники, рад' },
-              yaxis: { title: 'Наклон ФЧХ, рад/Гц' },
+              xaxis: {
+                title: 'Фаза 1-й гармоники, рад',
+                ...(scatterRange.x ? { range: scatterRange.x } : { autorange: true }),
+              },
+              yaxis: {
+                title: 'Наклон ФЧХ, рад/Гц',
+                ...(scatterRange.y ? { range: scatterRange.y } : { autorange: true }),
+              },
               legend: { orientation: 'h', y: -0.22 },
               paper_bgcolor: 'rgba(0,0,0,0)',
               plot_bgcolor: 'rgba(0,0,0,0)',
             }}
             config={{ displayModeBar: false, responsive: true }}
             style={{ width: '100%' }}
+            onRelayout={handleScatterRelayout}
           />
         )}
       </div>
