@@ -87,10 +87,14 @@
   color: var(--muted);
 }
 
+/* Раньше был свой gap 8px поверх margin-bottom подписи (.panel__label уже
+   даёт 12px) — они не перекрывались, а складывались в 20px, поэтому только
+   тут, в отличие от остальных подписей в приложении, отступ бросался в
+   глаза. .panel__label и без того задаёт нужный отступ, второй источник не
+   нужен. */
 .patient-panel {
   display: flex;
   flex-direction: column;
-  gap: var(--space-8);
 }
 
 .patient-search {
