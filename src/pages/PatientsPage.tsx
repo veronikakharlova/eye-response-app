@@ -188,8 +188,12 @@ export default function PatientsPage() {
                           <span className="data-table__name-main">{r.code}</span>
                         </div>
                       </td>
-                      <td className="data-table__name-sub">{r.fio ?? '—'}</td>
-                      <td className="data-table__name-sub">{formatIsoToRu(r.dob) ?? '—'}</td>
+                      {/* ФИО и дата рождения — такой же факт из базы, как код или
+                          диагноз, а не второстепенный текст, поэтому обычным
+                          цветом и размером, без .data-table__name-sub — эту
+                          приглушённую роль в строке несёт только примечание. */}
+                      <td>{r.fio ?? '—'}</td>
+                      <td>{formatIsoToRu(r.dob) ?? '—'}</td>
                       <td>
                         <span className="chip">{PATHOLOGY_LABELS[r.pathology]}</span>
                       </td>
