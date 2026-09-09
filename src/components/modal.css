@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: center;
   z-index: 50;
-  padding: 20px;
+  padding: var(--space-20);
 }
 
 .modal-panel {
@@ -24,7 +24,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 22px;
+  padding: var(--space-18) var(--space-22);
   border-bottom: 1px solid var(--border);
 }
 
@@ -53,15 +53,15 @@
 }
 
 .modal-panel__body {
-  padding: 20px 22px;
+  padding: var(--space-20) var(--space-22);
   overflow-y: auto;
 }
 
 .modal-panel__footer {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  padding: 16px 22px;
+  gap: var(--space-10);
+  padding: var(--space-16) var(--space-22);
   border-top: 1px solid var(--border);
 }
 
@@ -69,13 +69,13 @@
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px 16px;
+  gap: var(--space-14) var(--space-16);
 }
 
 .form-field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-6);
 }
 
 .form-field--full {
@@ -93,7 +93,7 @@
 .form-field textarea {
   border: 1px solid var(--border);
   border-radius: 9px;
-  padding: 8px 10px;
+  padding: var(--space-8) var(--space-10);
   font-size: 13.5px;
   font-family: inherit;
   color: var(--text);
@@ -116,14 +116,14 @@
 .form-check-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-8);
 }
 
 .form-radio-group label,
 .form-check-group label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-8);
   font-size: 13.5px;
   font-weight: 400;
   color: var(--text);

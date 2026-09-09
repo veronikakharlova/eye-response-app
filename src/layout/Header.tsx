@@ -5,18 +5,11 @@ import { isSupabaseConfigured } from '../lib/supabaseClient'
 import { usePatientsData } from '../lib/PatientsDataContext'
 import { computeMismatches, computeRecentlyAdded } from '../lib/notifications'
 import NotificationsModal from '../components/NotificationsModal'
+import Avatar, { initialsFromEmail } from '../components/Avatar'
 import './layout.css'
 
 type Props = {
   title: string
-}
-
-function initialsFromEmail(email: string | undefined): string {
-  if (!email) return 'Вр'
-  const local = email.split('@')[0]
-  const parts = local.split(/[._-]+/).filter(Boolean)
-  const letters = parts.length >= 2 ? parts[0][0] + parts[1][0] : local.slice(0, 2)
-  return letters.toUpperCase()
 }
 
 /**
@@ -67,7 +60,7 @@ export default function Header({ title }: Props) {
           )}
         </button>
         <Link to="/settings" className="app-header__avatar" title="Профиль врача" aria-label="Профиль врача">
-          {label}
+          <Avatar initials={label} size={40} />
         </Link>
       </div>
 

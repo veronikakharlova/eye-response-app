@@ -40,7 +40,7 @@ export default function NotificationsModal({ onClose }: Props) {
           description="Ни расхождений с диагнозом, ни новых пациентов за последние две недели."
         />
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-22)' }}>
           {mismatches.length > 0 && (
             <section>
               <span className="panel__label">Расхождение с диагнозом ({mismatches.length})</span>

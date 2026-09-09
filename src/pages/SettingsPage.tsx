@@ -3,16 +3,9 @@ import Header from '../layout/Header'
 import { useAuth } from '../lib/AuthContext'
 import { isSupabaseConfigured } from '../lib/supabaseClient'
 import { changePassword } from '../lib/backend'
+import Avatar, { initialsFromEmail } from '../components/Avatar'
 import '../layout/layout.css'
 import '../components/modal.css'
-
-function initialsFromEmail(email: string | undefined): string {
-  if (!email) return 'Вр'
-  const local = email.split('@')[0]
-  const parts = local.split(/[._-]+/).filter(Boolean)
-  const letters = parts.length >= 2 ? parts[0][0] + parts[1][0] : local.slice(0, 2)
-  return letters.toUpperCase()
-}
 
 // Демо-профиль для режима без Supabase — не настоящий аккаунт, просто
 // пример того, как выглядит карточка врача, когда она есть. Раньше здесь
@@ -36,30 +29,14 @@ export default function SettingsPage() {
       <div>
         <Header title="Настройки" />
 
-        <div className="data-card" style={{ padding: '28px 32px', maxWidth: 480, marginBottom: 20 }}>
+        <div className="data-card" style={{ padding: 'var(--space-28) var(--space-32)', maxWidth: 480, marginBottom: 'var(--space-20)' }}>
           <span className="panel__label">Профиль врача</span>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, margin: '16px 0 4px' }}>
-            <div
-              style={{
-                width: 56,
-                height: 56,
-                borderRadius: '999px',
-                background: 'linear-gradient(135deg, var(--accent), #9b8cff)',
-                color: '#fff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 18,
-                fontWeight: 600,
-                flexShrink: 0,
-              }}
-            >
-              {DEMO_DOCTOR.initials}
-            </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-16)', margin: '0 0 var(--space-4)' }}>
+            <Avatar initials={DEMO_DOCTOR.initials} size={56} />
             <div>
               <p style={{ margin: 0, fontSize: 15, fontWeight: 600 }}>{DEMO_DOCTOR.name}</p>
-              <p style={{ margin: '2px 0 0', fontSize: 13, color: 'var(--muted)' }}>Врач-офтальмолог</p>
+              <p style={{ margin: 'var(--space-2) 0 0', fontSize: 13, color: 'var(--muted)' }}>Врач-офтальмолог</p>
             </div>
           </div>
         </div>
@@ -118,30 +95,14 @@ export default function SettingsPage() {
     <div>
       <Header title="Настройки" />
 
-      <div className="data-card" style={{ padding: '28px 32px', maxWidth: 480, marginBottom: 20 }}>
+      <div className="data-card" style={{ padding: 'var(--space-28) var(--space-32)', maxWidth: 480, marginBottom: 'var(--space-20)' }}>
         <span className="panel__label">Профиль врача</span>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, margin: '16px 0 22px' }}>
-          <div
-            style={{
-              width: 56,
-              height: 56,
-              borderRadius: '999px',
-              background: 'linear-gradient(135deg, var(--accent), #9b8cff)',
-              color: '#fff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 18,
-              fontWeight: 600,
-              flexShrink: 0,
-            }}
-          >
-            {initialsFromEmail(session?.user.email)}
-          </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-16)', margin: '0 0 var(--space-22)' }}>
+          <Avatar initials={initialsFromEmail(session?.user.email)} size={56} />
           <div>
             <p style={{ margin: 0, fontSize: 15, fontWeight: 600 }}>{email}</p>
-            <p style={{ margin: '2px 0 0', fontSize: 13, color: 'var(--muted)' }}>Врач-офтальмолог</p>
+            <p style={{ margin: 'var(--space-2) 0 0', fontSize: 13, color: 'var(--muted)' }}>Врач-офтальмолог</p>
           </div>
         </div>
 
@@ -150,13 +111,13 @@ export default function SettingsPage() {
         </button>
       </div>
 
-      <p className="form-field__hint" style={{ maxWidth: 480, marginBottom: 20 }}>
+      <p className="form-field__hint" style={{ maxWidth: 480, marginBottom: 'var(--space-20)' }}>
         Имя и специализация задаются администратором клиники при создании аккаунта.
       </p>
 
-      <div className="data-card" style={{ padding: '28px 32px', maxWidth: 480 }}>
+      <div className="data-card" style={{ padding: 'var(--space-28) var(--space-32)', maxWidth: 480 }}>
         <span className="panel__label">Безопасность</span>
-        <p style={{ margin: '10px 0 18px', fontSize: 13.5, color: 'var(--muted)' }}>
+        <p style={{ margin: '0 0 var(--space-18)', fontSize: 13.5, color: 'var(--muted)' }}>
           Смените пароль.
         </p>
 
@@ -212,9 +173,9 @@ export default function SettingsPage() {
                 background: 'var(--warn-bg)',
                 color: 'var(--warn-text)',
                 borderRadius: 10,
-                padding: '10px 14px',
+                padding: 'var(--space-10) var(--space-14)',
                 fontSize: 13,
-                marginTop: 16,
+                marginTop: 'var(--space-16)',
               }}
             >
               {pwError}
@@ -226,9 +187,9 @@ export default function SettingsPage() {
                 background: 'var(--ok-bg)',
                 color: 'var(--ok-text)',
                 borderRadius: 10,
-                padding: '10px 14px',
+                padding: 'var(--space-10) var(--space-14)',
                 fontSize: 13,
-                marginTop: 16,
+                marginTop: 'var(--space-16)',
               }}
             >
               Пароль изменён.
@@ -239,7 +200,7 @@ export default function SettingsPage() {
             type="submit"
             className="page-btn page-btn--primary"
             disabled={submitting}
-            style={{ marginTop: 18 }}
+            style={{ marginTop: 'var(--space-18)' }}
           >
             {submitting ? 'Меняем…' : 'Сменить пароль'}
           </button>

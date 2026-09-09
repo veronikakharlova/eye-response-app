@@ -109,7 +109,7 @@ export default function AddVisitModal({ code, eye, onClose }: Props) {
         </div>
       </div>
 
-      {error && <p style={{ color: 'var(--warn-text)', fontSize: 13, marginTop: 12 }}>{error}</p>}
+      {error && <p style={{ color: 'var(--warn-text)', fontSize: 13, marginTop: 'var(--space-12)' }}>{error}</p>}
     </Modal>
   )
 }

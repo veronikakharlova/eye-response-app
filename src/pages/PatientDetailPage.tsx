@@ -110,7 +110,7 @@ export default function PatientDetailPage() {
     <div>
       <Header title={`Пациент ${patient.code}`} />
 
-      <button type="button" className="page-btn" style={{ marginBottom: 16 }} onClick={() => navigate('/patients')}>
+      <button type="button" className="page-btn" style={{ marginBottom: 'var(--space-16)' }} onClick={() => navigate('/patients')}>
         ← К списку пациентов
       </button>
 
@@ -257,9 +257,13 @@ export default function PatientDetailPage() {
             />
           </section>
 
-          <section className="data-card" style={{ padding: '20px 24px', marginTop: 20 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-              <span className="panel__label">Динамика по визитам ({eye === 'R' ? 'правый глаз' : 'левый глаз'})</span>
+          <section className="data-card" style={{ padding: 'var(--space-20) var(--space-24)', marginTop: 'var(--space-20)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+              {/* marginBottom обнулён: тут подпись стоит в одной строке с кнопкой,
+                  а не над отдельным блоком контента, обычный отступ снизу тут не нужен. */}
+              <span className="panel__label" style={{ marginBottom: 0 }}>
+                Динамика по визитам ({eye === 'R' ? 'правый глаз' : 'левый глаз'})
+              </span>
               <button type="button" className="page-btn" onClick={() => setAddVisitOpen(true)}>
                 + Добавить визит
               </button>
@@ -267,7 +271,7 @@ export default function PatientDetailPage() {
             {eyeVisits.length > 1 ? (
               <VisitTrendChart visits={eyeVisits} />
             ) : (
-              <p style={{ margin: '10px 2px 0', fontSize: 13.5, color: 'var(--muted)' }}>
+              <p style={{ margin: 'var(--space-10) var(--space-2) 0', fontSize: 13.5, color: 'var(--muted)' }}>
                 Пока в базе только {eyeVisits.length === 1 ? 'один визит' : 'нет визитов'} для этого глаза — тренд
                 появится, когда визитов станет хотя бы два. Одну точку без сравнения показывать не стали, чтобы
                 не выдавать за динамику то, чего ещё нет.

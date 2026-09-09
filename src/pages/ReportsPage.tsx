@@ -78,9 +78,9 @@ export default function ReportsPage() {
     <div>
       <Header title="Отчёты" />
 
-      <div className="data-card" style={{ padding: '24px 32px', maxWidth: 720, marginBottom: 20 }}>
+      <div className="data-card" style={{ padding: 'var(--space-24) var(--space-32)', maxWidth: 720, marginBottom: 'var(--space-20)' }}>
         <span className="panel__label">Экспорт пациентов</span>
-        <p style={{ margin: '10px 0 16px', fontSize: 14.5, color: 'var(--muted)' }}>
+        <p style={{ margin: '0 0 var(--space-16)', fontSize: 14.5, color: 'var(--muted)' }}>
           Выгружает всю таблицу «Пациенты» в CSV: код, диагноз и признаки по каждому визиту обоих глаз. Пригодится для дальнейшего анализа в Excel или Python. Сейчас это {patients.length} пациентов, {totalRecords} визитов.
         </p>
         <button type="button" className="page-btn page-btn--primary" onClick={handleDownloadCsv}>
@@ -88,10 +88,10 @@ export default function ReportsPage() {
         </button>
       </div>
 
-      <div className="data-card" style={{ padding: '24px 32px', maxWidth: 720 }}>
+      <div className="data-card" style={{ padding: 'var(--space-24) var(--space-32)', maxWidth: 720 }}>
         <span className="panel__label">Журнал скачиваний PDF-графиков</span>
         {!isSupabaseConfigured ? (
-          <p style={{ margin: '10px 0 0', fontSize: 14.5, color: 'var(--muted)' }}>
+          <p style={{ margin: 0, fontSize: 14.5, color: 'var(--muted)' }}>
             Журнал ведётся только при настроенном Supabase. Сейчас приложение работает на статичных данных, писать некуда.
           </p>
         ) : exportsError ? (
@@ -105,7 +105,7 @@ export default function ReportsPage() {
             description="Ещё никто не скачивал график ни одного пациента."
           />
         ) : (
-          <div className="data-table-scroll" style={{ marginTop: 10 }}>
+          <div className="data-table-scroll" style={{ marginTop: 'var(--space-10)' }}>
             <table className="data-table">
               <thead>
                 <tr>

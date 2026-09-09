@@ -1,18 +1,18 @@
 .page {
   max-width: 1320px;
   margin: 0 auto;
-  padding: 40px 24px 80px;
+  padding: var(--space-40) var(--space-24) var(--space-80);
 }
 
 @media (max-width: 640px) {
   .page {
-    padding: 20px 14px 60px;
+    padding: var(--space-20) var(--space-14) var(--space-60);
   }
 }
 
 .page__header h1 {
   font-size: 28px;
-  margin: 0 0 8px;
+  margin: 0 0 var(--space-8);
 }
 
 .page__subtitle {
@@ -26,7 +26,7 @@
 .layout {
   display: flex;
   align-items: flex-start;
-  gap: 24px;
+  gap: var(--space-24);
 }
 
 /* Обе половины экрана — сплошные белые карточки (как .chart справа),
@@ -37,15 +37,15 @@
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-8);
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 16px;
+  padding: var(--space-16);
 }
 
 .sidebar > section + section {
-  padding-top: 8px;
+  padding-top: var(--space-8);
   border-top: 1px solid var(--border);
 }
 
@@ -73,7 +73,16 @@
   }
 }
 
+/* Раньше отступ от подписи карточки до содержимого под ней задавался
+   отдельно в каждом месте использования (от 0 до 16px, без общей логики).
+   Теперь это одно правило: подпись сама отвечает за отступ снизу, а
+   элементы под ней больше не должны задавать свой margin-top для той же
+   цели (см. margin: 0 в соответствующих местах). Исключение — Динамика по
+   визитам на карточке пациента, где подпись стоит в одной строке с
+   кнопкой: там margin-bottom явно обнулён инлайн-стилем. */
 .panel__label {
+  display: block;
+  margin-bottom: var(--space-12);
   font-size: 13px;
   color: var(--muted);
 }
@@ -81,11 +90,11 @@
 .patient-panel {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-8);
 }
 
 .patient-search {
-  padding: 9px 12px;
+  padding: var(--space-9) var(--space-12);
   border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--surface);
@@ -103,13 +112,13 @@
 .patient-filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--space-6);
 }
 
 .patient-filter {
   font-family: inherit;
   font-size: 12px;
-  padding: 5px 10px;
+  padding: var(--space-5) var(--space-10);
   border-radius: 999px;
   border: 1px solid var(--border);
   background: var(--surface);
@@ -131,7 +140,7 @@
   border: 1px solid var(--border);
   border-radius: 14px;
   background: var(--surface);
-  padding: 4px;
+  padding: var(--space-4);
 }
 
 /* Два глаза одного пациента группируются под общим заголовком-кодом —
@@ -139,13 +148,13 @@
 .patient-group {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 6px 0 4px;
+  gap: var(--space-2);
+  padding: var(--space-6) 0 var(--space-4);
 }
 
 .patient-group + .patient-group {
   border-top: 1px solid var(--border);
-  margin-top: 2px;
+  margin-top: var(--space-2);
 }
 
 .patient-group__header {
@@ -154,14 +163,14 @@
   color: var(--text);
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  padding: 0 10px 2px;
+  padding: 0 var(--space-10) var(--space-2);
 }
 
 .patient-row {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  padding: 8px 10px;
+  gap: var(--space-5);
+  padding: var(--space-8) var(--space-10);
   border-radius: 7px;
   border: none;
   border-left: 3px solid transparent;
@@ -198,24 +207,24 @@
 .patient-row__tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--space-6);
 }
 
 .tag {
   font-size: 11px;
-  padding: 2px 9px;
+  padding: var(--space-2) var(--space-9);
   border-radius: 999px;
   background: var(--surface-muted);
   color: var(--muted);
 }
 
 .badge--sm {
-  padding: 2px 9px;
+  padding: var(--space-2) var(--space-9);
   font-size: 11px;
 }
 
 .patient-list__empty {
-  padding: 16px 10px;
+  padding: var(--space-16) var(--space-10);
   font-size: 13px;
   color: var(--muted);
   margin: 0;
@@ -226,7 +235,7 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 16px;
+  padding: var(--space-16);
   position: sticky;
   top: 24px;
 }
@@ -234,14 +243,14 @@
 .chart__controls {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: var(--space-8);
+  margin-bottom: var(--space-8);
 }
 
 .chart__controls-label {
   font-size: 12px;
   color: var(--muted);
-  margin-right: 2px;
+  margin-right: var(--space-2);
 }
 
 .chart__controls-sep {
@@ -250,7 +259,7 @@
 
 .range-input {
   width: 68px;
-  padding: 6px 8px;
+  padding: var(--space-6) var(--space-8);
   border-radius: 8px;
   border: 1px solid var(--border);
   background: var(--surface);
@@ -267,10 +276,10 @@
 }
 
 .chart__reset {
-  margin-left: 4px;
+  margin-left: var(--space-4);
   font-family: inherit;
   font-size: 12px;
-  padding: 6px 12px;
+  padding: var(--space-6) var(--space-12);
   border-radius: 8px;
   border: 1px solid var(--border);
   background: var(--surface);
@@ -288,7 +297,7 @@
   font-family: inherit;
   font-size: 12px;
   font-weight: 600;
-  padding: 6px 14px;
+  padding: var(--space-6) var(--space-14);
   border-radius: 8px;
   border: 1px solid var(--accent);
   background: var(--accent);
@@ -310,7 +319,7 @@
 .chart__print-header {
   font-size: 13px;
   color: var(--muted);
-  margin-bottom: 10px;
+  margin-bottom: var(--space-10);
 }
 
 @media print {
@@ -340,23 +349,23 @@
 
 .features h2 {
   font-size: 16px;
-  margin: 0 0 6px;
+  margin: 0 0 var(--space-6);
 }
 
 .features__grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 6px;
+  gap: var(--space-6);
 }
 
 .features__grid > div {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 6px 8px;
+  padding: var(--space-6) var(--space-8);
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: var(--space-3);
 }
 
 .features__grid span {
@@ -372,11 +381,11 @@
 /* НЧ/ВЧ — не пятый измеренный признак, а отношение двух соседних (НЧ и ВЧ),
    поэтому отдельная строка с другим фоном, а не ещё одна ячейка в сетке 2×2. */
 .features__derived {
-  margin-top: 6px;
+  margin-top: var(--space-6);
   background: var(--surface-muted);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 6px 10px;
+  padding: var(--space-6) var(--space-10);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -395,7 +404,7 @@
 .result {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-8);
 }
 
 /* Факт из базы — не оценка и не вычисление, поэтому без цветной плашки и акцента */
@@ -403,8 +412,8 @@
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  gap: 8px;
-  padding: 2px 4px;
+  gap: var(--space-8);
+  padding: var(--space-2) var(--space-4);
 }
 
 .result__fact-label {
@@ -428,7 +437,7 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 10px 12px;
+  padding: var(--space-10) var(--space-12);
 }
 
 .result__classification-row {
@@ -436,7 +445,7 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 8px 14px;
+  gap: var(--space-8) var(--space-14);
   font-size: 14px;
   color: var(--text);
 }
@@ -446,9 +455,9 @@
 .result__classification-note {
   display: flex;
   align-items: flex-start;
-  gap: 6px;
-  margin: 6px 0 0;
-  padding-top: 6px;
+  gap: var(--space-6);
+  margin: var(--space-6) 0 0;
+  padding-top: var(--space-6);
   border-top: 1px solid var(--border);
   font-size: 12px;
   line-height: 1.35;
@@ -460,7 +469,10 @@
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 3px 11px;
+  /* Паддинг чуть больше, чем у .tag/.badge--sm (2px/9px), сознательно: тут
+     текст крупнее и полужирный (12px/600 против 11px/400 у тега), поэтому
+     пилюле нужно чуть больше воздуха, а не тот же паддинг один в один. */
+  padding: var(--space-3) var(--space-11);
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
@@ -484,7 +496,7 @@
   font-size: 13px;
   line-height: 1.5;
   margin: 0;
-  padding: 0 4px;
+  padding: 0 var(--space-4);
 }
 
 /* Свёрнуто по умолчанию — видно первые 2 строки, весь текст остаётся в
@@ -503,7 +515,7 @@
 
 .result__caveat-toggle {
   align-self: flex-start;
-  margin: 4px 4px 0;
+  margin: var(--space-4) var(--space-4) 0;
   border: none;
   background: none;
   padding: 0;

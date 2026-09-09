@@ -162,7 +162,7 @@ export default function AddPatientModal({ onClose, onAdd }: Props) {
         </>
       }
     >
-      <div className="mode-toggle" role="tablist" style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
+      <div className="mode-toggle" role="tablist" style={{ display: 'flex', gap: 'var(--space-8)', marginBottom: 'var(--space-14)' }}>
         <button
           type="button"
           className={`page-btn${mode === 'manual' ? ' page-btn--primary' : ''}`}
@@ -179,7 +179,7 @@ export default function AddPatientModal({ onClose, onAdd }: Props) {
         </button>
       </div>
 
-      <p className="form-field__hint" style={{ marginBottom: 14 }}>
+      <p className="form-field__hint" style={{ marginBottom: 'var(--space-14)' }}>
         {isSupabaseConfigured
           ? 'Запись сохранится в общей базе: её увидят все, у кого есть доступ к этому приложению.'
           : 'Пока без базы данных: запись появится в таблице сразу, но живёт только в этой вкладке и исчезнет при перезагрузке страницы.'}
@@ -245,10 +245,10 @@ export default function AddPatientModal({ onClose, onAdd }: Props) {
               onChange={(e) => handleFileChange(e.target.files?.[0] ?? null)}
             />
             {deviceFileName && <span className="form-field__hint">Файл: {deviceFileName}</span>}
-            {deviceError && <p style={{ color: 'var(--warn-text)', fontSize: 13, marginTop: 6 }}>{deviceError}</p>}
+            {deviceError && <p style={{ color: 'var(--warn-text)', fontSize: 13, marginTop: 'var(--space-6)' }}>{deviceError}</p>}
 
             {deviceFile && group && (
-              <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div style={{ marginTop: 'var(--space-12)', display: 'flex', flexDirection: 'column', gap: 'var(--space-10)' }}>
                 <div className="form-field">
                   <label>Протокол записи</label>
                   <select value={groupIndex} onChange={(e) => setGroupIndex(Number(e.target.value))}>
@@ -276,8 +276,8 @@ export default function AddPatientModal({ onClose, onAdd }: Props) {
                 </span>
 
                 {analysis ? (
-                  <div className="data-card" style={{ padding: 12 }}>
-                    <p style={{ fontSize: 13, marginBottom: 8 }}>
+                  <div className="data-card" style={{ padding: 'var(--space-12)' }}>
+                    <p style={{ fontSize: 13, marginBottom: 'var(--space-8)' }}>
                       Рассчитано через дискретное Фурье-преобразование и синтетический опорный импульс.
                       Абсолютные числа не обязаны точно совпадать с ранее сохранёнными значениями: там
                       использовался другой исходный файл.
@@ -305,7 +305,7 @@ export default function AddPatientModal({ onClose, onAdd }: Props) {
       </div>
 
       {error && (
-        <p style={{ color: 'var(--warn-text)', fontSize: 13, marginTop: 12 }}>{error}</p>
+        <p style={{ color: 'var(--warn-text)', fontSize: 13, marginTop: 'var(--space-12)' }}>{error}</p>
       )}
     </Modal>
   )

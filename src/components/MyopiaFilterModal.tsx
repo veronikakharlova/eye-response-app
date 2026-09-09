@@ -37,7 +37,7 @@ export default function MyopiaFilterModal({ value, onChange, onClose, allStages,
         </>
       }
     >
-      <div className="form-field form-field--full" style={{ marginBottom: 18 }}>
+      <div className="form-field form-field--full" style={{ marginBottom: 'var(--space-18)' }}>
         <label>Стадия</label>
         <div className="form-check-group">
           {allStages.map((stage) => (
@@ -53,7 +53,7 @@ export default function MyopiaFilterModal({ value, onChange, onClose, allStages,
         </div>
       </div>
 
-      <div className="form-field form-field--full" style={{ marginBottom: 18 }}>
+      <div className="form-field form-field--full" style={{ marginBottom: 'var(--space-18)' }}>
         <label>Оператор</label>
         <div className="form-check-group">
           {allOperators.map((op) => (

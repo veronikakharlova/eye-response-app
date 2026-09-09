@@ -73,7 +73,7 @@ export default function AddMyopiaPatientModal({ onClose, onAdd }: Props) {
         </>
       }
     >
-      <p className="form-field__hint" style={{ marginBottom: 14 }}>
+      <p className="form-field__hint" style={{ marginBottom: 'var(--space-14)' }}>
         Пока без базы данных: запись появится в таблице сразу, но живёт только в этой вкладке и исчезнет при
         перезагрузке страницы.
       </p>
@@ -144,7 +144,7 @@ export default function AddMyopiaPatientModal({ onClose, onAdd }: Props) {
         </div>
       </div>
 
-      {error && <p style={{ color: 'var(--warn-text)', fontSize: 13, marginTop: 12 }}>{error}</p>}
+      {error && <p style={{ color: 'var(--warn-text)', fontSize: 13, marginTop: 'var(--space-12)' }}>{error}</p>}
     </Modal>
   )
 }

@@ -92,7 +92,7 @@ export function ErrorState({ title, description, action }: ErrorStateProps) {
       <p className="state-view__title">{title}</p>
       {description && <p className="state-view__desc">{description}</p>}
       {action && (
-        <button type="button" className="page-btn page-btn--primary" style={{ marginTop: 14 }} onClick={action.onClick}>
+        <button type="button" className="page-btn page-btn--primary" style={{ marginTop: 'var(--space-14)' }} onClick={action.onClick}>
           {action.label}
         </button>
       )}

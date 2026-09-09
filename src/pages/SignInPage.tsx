@@ -42,13 +42,13 @@ export default function SignInPage() {
         alignItems: 'center',
         justifyContent: 'center',
         background: 'var(--bg)',
-        padding: 20,
+        padding: 'var(--space-20)',
       }}
     >
       <form
         onSubmit={handleSubmit}
         className="data-card"
-        style={{ width: '100%', maxWidth: 380, padding: '32px 28px' }}
+        style={{ width: '100%', maxWidth: 380, padding: 'var(--space-32) var(--space-28)' }}
       >
         <div
           style={{
@@ -59,7 +59,7 @@ export default function SignInPage() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            marginBottom: 18,
+            marginBottom: 'var(--space-18)',
           }}
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -68,8 +68,8 @@ export default function SignInPage() {
           </svg>
         </div>
 
-        <h1 style={{ fontSize: 19, fontWeight: 600, margin: '0 0 4px' }}>Вход врача</h1>
-        <p className="page-subtitle" style={{ margin: '0 0 20px' }}>
+        <h1 style={{ fontSize: 19, fontWeight: 600, margin: '0 0 var(--space-4)' }}>Вход врача</h1>
+        <p className="page-subtitle" style={{ margin: '0 0 var(--space-20)' }}>
           Частотная характеристика сетчатки. Доступ только для авторизованных.
         </p>
 
@@ -98,18 +98,18 @@ export default function SignInPage() {
           </div>
         </div>
 
-        {error && <p style={{ color: 'var(--warn-text)', fontSize: 13, marginTop: 14 }}>{error}</p>}
+        {error && <p style={{ color: 'var(--warn-text)', fontSize: 13, marginTop: 'var(--space-14)' }}>{error}</p>}
 
         <button
           type="submit"
           className="page-btn page-btn--primary"
           disabled={submitting}
-          style={{ width: '100%', marginTop: 18 }}
+          style={{ width: '100%', marginTop: 'var(--space-18)' }}
         >
           {submitting ? 'Входим…' : 'Войти'}
         </button>
 
-        <p className="form-field__hint" style={{ marginTop: 14, textAlign: 'center' }}>
+        <p className="form-field__hint" style={{ marginTop: 'var(--space-14)', textAlign: 'center' }}>
           Аккаунт создаётся вручную в Supabase Dashboard, публичной регистрации нет.
         </p>
       </form>

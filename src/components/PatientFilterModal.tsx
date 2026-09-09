@@ -32,7 +32,7 @@ export default function PatientFilterModal({ value, onChange, onClose }: Props) 
         </>
       }
     >
-      <div className="form-field form-field--full" style={{ marginBottom: 18 }}>
+      <div className="form-field form-field--full" style={{ marginBottom: 'var(--space-18)' }}>
         <label>Совпадение классификации с диагнозом</label>
         <div className="form-radio-group">
           {[

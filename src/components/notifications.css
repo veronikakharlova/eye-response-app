@@ -1,15 +1,16 @@
 .notification-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-top: 10px;
+  gap: var(--space-6);
+  /* Отступ сверху больше не задаём здесь: он идёт от .panel__label,
+     который всегда стоит прямо перед этим списком (см. App.css). */
 }
 
 .notification-item {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 8px;
+  padding: var(--space-8);
   border: none;
   border-radius: 10px;
   background: transparent;
@@ -25,7 +26,7 @@
 .notification-item__text {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--space-2);
   min-width: 0;
 }
 

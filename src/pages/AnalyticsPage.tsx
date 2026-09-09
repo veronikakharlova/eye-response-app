@@ -132,17 +132,17 @@ export default function AnalyticsPage() {
         Средние значения признаков по 4 группам патологий, разброс по отдельным пациентам и точность классификации на текущих данных.
       </p>
 
-      <div className="data-card" style={{ padding: '20px 24px', marginBottom: 20 }}>
+      <div className="data-card" style={{ padding: 'var(--space-20) var(--space-24)', marginBottom: 'var(--space-20)' }}>
         <span className="panel__label">Средние по группам</span>
         <Plot
           data={barTraces}
           layout={barLayout}
           config={{ displayModeBar: false, responsive: true }}
-          style={{ width: '100%', marginTop: 8 }}
+          style={{ width: '100%' }}
         />
       </div>
 
-      <div className="data-card" style={{ marginBottom: 20 }}>
+      <div className="data-card" style={{ marginBottom: 'var(--space-20)' }}>
         <div className="data-table-scroll">
           <table className="data-table">
             <thead>
@@ -181,9 +181,9 @@ export default function AnalyticsPage() {
         </div>
       </div>
 
-      <div className="data-card" style={{ padding: '20px 24px', marginBottom: 20 }}>
+      <div className="data-card" style={{ padding: 'var(--space-20) var(--space-24)', marginBottom: 'var(--space-20)' }}>
         <span className="panel__label">Пациенты по признакам (не только средние)</span>
-        <p style={{ margin: '6px 0 4px', fontSize: 13, color: 'var(--muted)' }}>
+        <p style={{ margin: '0 0 var(--space-4)', fontSize: 13, color: 'var(--muted)' }}>
           Каждая точка — один визит (глаз) одного пациента, ромбы — средние по группе. Группы сильно перекрываются между собой: таблица выше показывает только средние и скрывает этот разброс.
         </p>
         {loading ? (
@@ -204,12 +204,12 @@ export default function AnalyticsPage() {
               plot_bgcolor: 'rgba(0,0,0,0)',
             }}
             config={{ displayModeBar: false, responsive: true }}
-            style={{ width: '100%', marginTop: 8 }}
+            style={{ width: '100%' }}
           />
         )}
       </div>
 
-      <div className="data-card" style={{ padding: '20px 24px', marginBottom: 20 }}>
+      <div className="data-card" style={{ padding: 'var(--space-20) var(--space-24)', marginBottom: 'var(--space-20)' }}>
         <span className="panel__label">Точность классификации на текущих данных</span>
         {loading ? (
           <ChartSkeleton height={140} />
@@ -217,16 +217,16 @@ export default function AnalyticsPage() {
           <ErrorState title="Не удалось загрузить пациентов" description={error} />
         ) : accuracy ? (
           <>
-            <div className="features__derived" style={{ marginTop: 10 }}>
+            <div className="features__derived">
               <span>Совпадение метода с диагнозом, все визиты</span>
               <strong>
                 {(accuracy.overallPct * 100).toFixed(0)}% ({accuracy.overallMatch}/{accuracy.total})
               </strong>
             </div>
-            <div className="features__grid" style={{ marginTop: 10, gridTemplateColumns: 'repeat(4, 1fr)' }}>
+            <div className="features__grid" style={{ marginTop: 'var(--space-10)', gridTemplateColumns: 'repeat(4, 1fr)' }}>
               {accuracy.byGroup.map((g) => (
                 <div key={g.pathology}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-6)' }}>
                     <span
                       style={{
                         width: 8,
@@ -244,14 +244,14 @@ export default function AnalyticsPage() {
                 </div>
               ))}
             </div>
-            <p style={{ margin: '10px 2px 0', fontSize: 12.5, color: 'var(--muted)' }}>
+            <p style={{ margin: 'var(--space-10) var(--space-2) 0', fontSize: 12.5, color: 'var(--muted)' }}>
               Пересчитано методом городских кварталов (см. «О проекте») по всем текущим визитам. Число не статичное: оно пересчитывается заново на сегодняшних данных приложения.
             </p>
           </>
         ) : null}
       </div>
 
-      <p className="page-subtitle" style={{ marginTop: 18 }}>
+      <p className="page-subtitle" style={{ marginTop: 'var(--space-18)' }}>
         Наклон ФЧХ и фаза 1-й гармоники растут в одном и том же порядке патологий (Норма → Миопия → ВМД → Глаукома). Это единственная закономерность, которая на текущих данных выглядит достаточно устойчивой. Разброс внутри каждой группы велик, особенно у НЧ/ВЧ (см. точки выше).
       </p>
     </div>
