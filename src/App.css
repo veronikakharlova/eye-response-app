@@ -349,20 +349,21 @@
 
 .features h2 {
   font-size: 16px;
-  margin: 0 0 var(--space-6);
+  margin: 0 0 var(--space-12);
 }
 
+/* Раньше каждый признак сидел в собственной рамке (фон + border + радиус)
+   внутри и так уже обведённой карточки сайдбара — получалась рамка в рамке
+   пять раз подряд, лишний визуальный шум на маленькой площади. Группировка
+   через воздух между подписью и значением работает не хуже, а рамка
+   остаётся только у сайдбара как у единственного настоящего контейнера. */
 .features__grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-6);
+  gap: var(--space-16) var(--space-20);
 }
 
 .features__grid > div {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: var(--space-6) var(--space-8);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -383,13 +384,14 @@
 }
 
 /* НЧ/ВЧ — не пятый измеренный признак, а отношение двух соседних (НЧ и ВЧ),
-   поэтому отдельная строка с другим фоном, а не ещё одна ячейка в сетке 2×2. */
+   поэтому визуально отделено. Раньше — закрашенным боксом (ещё одна рамка
+   в общей куче), теперь — тонкой чертой сверху, как между секциями самого
+   сайдбара (.sidebar > section + section): тот же приём для того же смысла
+   "дальше — отдельное", без лишней коробки. */
 .features__derived {
-  margin-top: var(--space-6);
-  background: var(--surface-muted);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: var(--space-6) var(--space-10);
+  margin-top: var(--space-12);
+  padding-top: var(--space-10);
+  border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
